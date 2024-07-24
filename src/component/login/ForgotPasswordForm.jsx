@@ -10,7 +10,7 @@ const ForgotPasswordForm = ({ changeForm }) => {
   };
   return (
     <div>
-      <p className=" text-center text-2xl font-bold ">Login</p>
+      <p className=" text-center text-2xl font-bold ">Forgot Password</p>
       <Form
         name="basic"
         layout="vertical"
