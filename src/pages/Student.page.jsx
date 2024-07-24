@@ -1,7 +1,8 @@
 import React from "react";
+import StudentScreen from "../component/student/Student.screen";
 
 const StudentPage = () => {
-  return <div>StudentPage</div>;
+  return <StudentScreen />;
 };
 
 export default StudentPage;

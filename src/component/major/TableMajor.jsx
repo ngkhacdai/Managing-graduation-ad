@@ -48,12 +48,14 @@ const TableMajor = ({ majorData }) => {
         return (
           <div>
             <Button
+              type="primary"
               onClick={() => showModalUpdate(record)}
               className="bg-yellow-400 hover:bg-yellow-300 mr-2"
             >
               Update
             </Button>
             <Button
+              type="primary"
               onClick={() => showModalDelelte(record)}
               className="bg-red-500 hover:bg-red-400"
             >

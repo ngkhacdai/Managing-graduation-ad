@@ -18,14 +18,15 @@ const ModalDeleteMajor = ({ major, closeModal }) => {
   return (
     <div>
       <Modal
-        title="Delete major"
+        title={<p>Are you want to delete {major.majorName}?</p>}
         open={isModalOpen}
         okText="Delete"
-        centered
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Are you want to delete {major.majorName}?</p>
+        <p className="text-2xl text-red-500">
+          To be carefully, this action can not be undo!
+        </p>
       </Modal>
     </div>
   );

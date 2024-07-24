@@ -7,9 +7,13 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { MdDashboard, MdOutlineLocalLibrary } from "react-icons/md";
-import { FaChalkboardTeacher, FaProjectDiagram } from "react-icons/fa";
+import {
+  FaChalkboardTeacher,
+  FaCodeBranch,
+  FaProjectDiagram,
+} from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
 const { Header, Sider, Content } = Layout;
 const SideBar = () => {
@@ -17,6 +21,7 @@ const SideBar = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  let location = useLocation();
   return (
     <div>
       <Layout>
@@ -30,35 +35,35 @@ const SideBar = () => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={[location.pathname]}
             items={[
               {
-                key: "1",
+                key: "/home",
                 icon: <MdDashboard />,
                 label: <Link to={"/home"}>Dashboard</Link>,
               },
               {
-                key: "2",
-                icon: <MdDashboard />,
+                key: "/home/major",
+                icon: <FaCodeBranch />,
                 label: <Link to={"major"}>Major</Link>,
               },
               {
-                key: "3",
+                key: "/home/project",
                 icon: <FaProjectDiagram />,
                 label: <Link to={"project"}>Project</Link>,
               },
               {
-                key: "4",
+                key: "/home/student",
                 icon: <PiStudentBold />,
                 label: <Link to={"student"}>Student</Link>,
               },
               {
-                key: "5",
+                key: "/home/teacher",
                 icon: <FaChalkboardTeacher />,
                 label: <Link to={"teacher"}>Teacher</Link>,
               },
               {
-                key: "6",
+                key: "/home/library",
                 icon: <MdOutlineLocalLibrary />,
                 label: <Link to={"library"}>Library</Link>,
               },
@@ -72,16 +77,20 @@ const SideBar = () => {
               background: colorBgContainer,
             }}
           >
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
+            <div className="flex justify-between items-center">
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                }}
+              />
+              <p className="font-bold text-xl">A</p>
+              <Button className="mx-2">Log out</Button>
+            </div>
           </Header>
 
           <Content
