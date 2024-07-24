@@ -9,6 +9,9 @@ const ModalDetail = ({ detailProject, closeModal }) => {
   }, []);
   const handleOk = () => {
     setIsModalOpen(false);
+    setTimeout(() => {
+      closeModal();
+    }, 300);
   };
   const handleCancel = () => {
     setIsModalOpen(false);

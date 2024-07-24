@@ -88,7 +88,19 @@ const SideBar = () => {
                   height: 64,
                 }}
               />
-              <p className="font-bold text-xl">A</p>
+              <p className="font-bold text-xl">
+                {location.pathname === "/home"
+                  ? "Dashboard"
+                  : location.pathname === "/home/major"
+                  ? "Major"
+                  : location.pathname === "/home/project"
+                  ? "Project"
+                  : location.pathname === "/home/student"
+                  ? "Student"
+                  : location.pathname === "/home/teacher"
+                  ? "Teacher"
+                  : location.pathname === "/home/library" && "Library"}
+              </p>
               <Button className="mx-2">Log out</Button>
             </div>
           </Header>

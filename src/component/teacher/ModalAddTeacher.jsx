@@ -1,18 +1,18 @@
 import { Button, Form, Input, Modal, Select } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { IoIosPersonAdd } from "react-icons/io";
 
-const ModalUpdateStudent = ({ student, closeModal }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const ModalAddTeacher = () => {
+  const [isShowModal, setIsShowModal] = useState(false);
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    setIsModalOpen(true);
-  }, []);
+  const showModal = () => {
+    setIsShowModal(true);
+  };
+  const closeModal = () => {
+    setIsShowModal(false);
+  };
   const handleCancel = () => {
-    setIsModalOpen(false);
-    setTimeout(() => {
-      closeModal();
-    }, 300);
+    closeModal();
   };
   const handleOk = () => {
     form.submit();
@@ -26,7 +26,7 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
   const handleFinish = () => {
     console.log("Success:", form.getFieldsValue());
     clearForm();
-    setIsModalOpen(false);
+    setIsShowModal(false);
   };
   const onFill = () => {
     form.setFieldsValue({
@@ -35,14 +35,20 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
   };
   return (
     <div>
+      <Button
+        type="primary"
+        onClick={showModal}
+        className="flex justify-center items-center"
+      >
+        <IoIosPersonAdd /> Add teacher
+      </Button>
       <Modal
-        cancelText="Cancel"
-        okText="Update"
+        okText="Add"
         centered
         onOk={handleOk}
         onCancel={handleCancel}
-        open={isModalOpen}
-        title="Update student"
+        title="Add teacher"
+        open={isShowModal}
         footer={
           <div>
             <Button onClick={handleCancel}>Cancel</Button>
@@ -53,7 +59,7 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
               Clear Form
             </Button>
             <Button onClick={handleOk} type="primary">
-              Update
+              Add
             </Button>
           </div>
         }
@@ -61,66 +67,74 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
         <Form
           layout="vertical"
           initialValues={{
-            password: student.password,
-            studentName: student.studentName,
-            studentID: student.id,
-            studentEmail: student.email,
-            studentClass: student.class,
-            studentMajor: student.major,
+            password: Math.random().toString(36).slice(-8),
           }}
           form={form}
           onFinish={handleFinish}
         >
           <Form.Item
-            label="Student name"
+            label="Teacher name"
             rules={[
               {
                 required: true,
-                message: "Please input student name!",
+                message: "Please input teacher name!",
               },
             ]}
-            name="studentName"
+            name="teacherName"
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Student ID"
+            label="Teacher email"
+            name="teacherEmail"
             rules={[
               {
                 required: true,
-                message: "Please input student ID!",
-              },
-            ]}
-            name="studentID"
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Student email"
-            name="studentEmail"
-            rules={[
-              {
-                required: true,
-                message: "The input is not valid E-mail!",
+                message: "Please input email!",
               },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Student class"
-            name="studentClass"
+            label="Work place"
+            name="workPlace"
             rules={[
               {
                 required: true,
-                message: "Please input student class!",
+                message: "Please input work place!",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Major" name="studentMajor">
+          <Form.Item
+            label="Degree"
+            name="degree"
+            rules={[
+              {
+                required: true,
+                message: "Please input degree!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Academic Rank"
+            name="academicRank"
+            rules={[
+              {
+                required: true,
+                message: "Please input academic rank!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Major" name="teacherMajor">
             <Select
+              defaultValue="lucy"
               className="w-full text-center"
               onChange={handleChange}
               options={[
@@ -135,11 +149,6 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
                 {
                   value: "Yiminghe",
                   label: "yiminghe",
-                },
-                {
-                  value: "disabled",
-                  label: "Disabled",
-                  disabled: true,
                 },
               ]}
             />
@@ -156,4 +165,4 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
   );
 };
 
-export default ModalUpdateStudent;
+export default ModalAddTeacher;

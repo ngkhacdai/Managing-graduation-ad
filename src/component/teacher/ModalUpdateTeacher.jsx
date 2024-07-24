@@ -1,10 +1,9 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 
-const ModalUpdateStudent = ({ student, closeModal }) => {
+const ModalUpdateTeacher = ({ teacher, closeModal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
@@ -17,9 +16,7 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
   const handleOk = () => {
     form.submit();
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+
   const clearForm = () => {
     form.resetFields();
   };
@@ -27,12 +24,11 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
     console.log("Success:", form.getFieldsValue());
     clearForm();
     setIsModalOpen(false);
+    setTimeout(() => {
+      closeModal();
+    }, 300);
   };
-  const onFill = () => {
-    form.setFieldsValue({
-      password: Math.random().toString(36).slice(-8),
-    });
-  };
+
   return (
     <div>
       <Modal
@@ -42,7 +38,7 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
         onOk={handleOk}
         onCancel={handleCancel}
         open={isModalOpen}
-        title="Update student"
+        title="Update teacher"
         footer={
           <div>
             <Button onClick={handleCancel}>Cancel</Button>
@@ -61,99 +57,79 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
         <Form
           layout="vertical"
           initialValues={{
-            password: student.password,
-            studentName: student.studentName,
-            studentID: student.id,
-            studentEmail: student.email,
-            studentClass: student.class,
-            studentMajor: student.major,
+            teacherName: teacher.teacherName,
+            teacherEmail: teacher.email,
+            workPlace: teacher.workPlace,
+            degree: teacher.degree,
+            academicRank: teacher.academicRank,
           }}
           form={form}
           onFinish={handleFinish}
         >
           <Form.Item
-            label="Student name"
+            label="Teacher name"
             rules={[
               {
                 required: true,
-                message: "Please input student name!",
+                message: "Please input teacher name!",
               },
             ]}
-            name="studentName"
+            name="teacherName"
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Student ID"
+            label="Teacher email"
+            name="teacherEmail"
             rules={[
               {
                 required: true,
-                message: "Please input student ID!",
-              },
-            ]}
-            name="studentID"
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Student email"
-            name="studentEmail"
-            rules={[
-              {
-                required: true,
-                message: "The input is not valid E-mail!",
+                message: "Please input email!",
               },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Student class"
-            name="studentClass"
+            label="Work place"
+            name="workPlace"
             rules={[
               {
                 required: true,
-                message: "Please input student class!",
+                message: "Please input work place!",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Major" name="studentMajor">
-            <Select
-              className="w-full text-center"
-              onChange={handleChange}
-              options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "Yiminghe",
-                  label: "yiminghe",
-                },
-                {
-                  value: "disabled",
-                  label: "Disabled",
-                  disabled: true,
-                },
-              ]}
-            />
+          <Form.Item
+            label="Degree"
+            name="degree"
+            rules={[
+              {
+                required: true,
+                message: "Please input degree!",
+              },
+            ]}
+          >
+            <Input />
           </Form.Item>
-          <div className="flex justify-between items-center">
-            <Form.Item label="Password" name="password">
-              <Input disabled className="text-black cursor-default" />
-            </Form.Item>
-            <Button onClick={onFill}>Reset Password</Button>
-          </div>
+          <Form.Item
+            label="Academic Rank"
+            name="academicRank"
+            rules={[
+              {
+                required: true,
+                message: "Please input academic rank!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
         </Form>
       </Modal>
     </div>
   );
 };
 
-export default ModalUpdateStudent;
+export default ModalUpdateTeacher;

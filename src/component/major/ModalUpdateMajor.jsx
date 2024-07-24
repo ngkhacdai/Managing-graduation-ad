@@ -10,6 +10,9 @@ const ModalUpdateMajor = ({ major, closeModal }) => {
   }, []);
   const handleOk = () => {
     setIsModalOpen(false);
+    setTimeout(() => {
+      closeModal();
+    }, 300);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
