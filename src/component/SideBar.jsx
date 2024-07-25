@@ -73,11 +73,14 @@ const SideBar = () => {
         <Layout>
           <Header
             style={{
+              position: "sticky",
+              top: 0,
               padding: 0,
+              zIndex: 10,
               background: colorBgContainer,
             }}
           >
-            <div className="flex justify-between items-center">
+            <div className="flex  justify-between items-center">
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

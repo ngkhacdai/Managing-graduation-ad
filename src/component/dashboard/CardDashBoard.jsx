@@ -1,7 +1,13 @@
 import { Button, Card } from "antd";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setDetail } from "../../redux/slice/DashBoard.slice";
 
 const CardDashBoard = ({ title, totalTitle }) => {
+  const dispatch = useDispatch();
+  const saveTitle = () => {
+    dispatch(setDetail(title));
+  };
   return (
     <div>
       <Card
@@ -10,7 +16,9 @@ const CardDashBoard = ({ title, totalTitle }) => {
         bordered={false}
       >
         <p className="text-black text-lg">{title}</p>
-        <Button type="link">Detail</Button>
+        {/* <Button onClick={saveTitle} type="link">
+          Detail
+        </Button> */}
       </Card>
     </div>
   );
