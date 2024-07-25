@@ -62,11 +62,11 @@ const SideBar = () => {
                 icon: <FaChalkboardTeacher />,
                 label: <Link to={"teacher"}>Teacher</Link>,
               },
-              {
-                key: "/home/library",
-                icon: <MdOutlineLocalLibrary />,
-                label: <Link to={"library"}>Library</Link>,
-              },
+              // {
+              //   key: "/home/library",
+              //   icon: <MdOutlineLocalLibrary />,
+              //   label: <Link to={"library"}>Library</Link>,
+              // },
             ]}
           />
         </Sider>
