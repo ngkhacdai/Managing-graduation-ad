@@ -1,13 +1,17 @@
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { updateStudent } from "../../api/student";
+import { useDispatch } from "react-redux";
+import { updateStudentAction } from "../../redux/slice/StudentSlice";
 
-const ModalUpdateStudent = ({ student, closeModal }) => {
+const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setTimeout(() => {
@@ -17,16 +21,35 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
   const handleOk = () => {
     form.submit();
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
   const clearForm = () => {
     form.resetFields();
   };
-  const handleFinish = () => {
-    console.log("Success:", form.getFieldsValue());
-    clearForm();
+  const handleFinish = async () => {
+    const { email, password, status, userName } = form.getFieldsValue();
+    const formData = {
+      email,
+      status,
+      userName,
+    };
+
+    if (password) {
+      formData.password = password;
+    }
+
+    try {
+      const response = await updateStudent(student.id, formData);
+      console.log(response);
+      dispatch(updateStudentAction(response));
+    } catch (error) {
+      console.log(error);
+      alertMessage("Update student failed", "error");
+    }
     setIsModalOpen(false);
+    clearForm();
+
+    setTimeout(() => {
+      closeModal();
+    }, 300);
   };
   const onFill = () => {
     form.setFieldsValue({
@@ -61,86 +84,46 @@ const ModalUpdateStudent = ({ student, closeModal }) => {
         <Form
           layout="vertical"
           initialValues={{
-            password: student.password,
-            studentName: student.studentName,
-            studentID: student.id,
-            studentEmail: student.email,
-            studentClass: student.class,
-            studentMajor: student.major,
+            userName: student.userName,
+            email: student.email,
+            status: student.status,
           }}
           form={form}
           onFinish={handleFinish}
         >
           <Form.Item
-            label="Student name"
+            label="Username"
             rules={[
               {
                 required: true,
-                message: "Please input student name!",
+                message: "Please input user name!",
               },
             ]}
-            name="studentName"
+            name="userName"
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            label="Student ID"
-            rules={[
-              {
-                required: true,
-                message: "Please input student ID!",
-              },
-            ]}
-            name="studentID"
-          >
-            <Input type="number" />
           </Form.Item>
           <Form.Item
             label="Student email"
-            name="studentEmail"
+            name="email"
             rules={[
               {
-                required: true,
+                type: "email",
                 message: "The input is not valid E-mail!",
               },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Student class"
-            name="studentClass"
-            rules={[
               {
                 required: true,
-                message: "Please input student class!",
+                message: "Please input your E-mail!",
               },
             ]}
           >
-            <Input />
+            <Input type="email" />
           </Form.Item>
-          <Form.Item label="Major" name="studentMajor">
-            <Select
-              className="w-full text-center"
-              onChange={handleChange}
+          <Form.Item label="Active" name="status">
+            <Radio.Group
               options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "Yiminghe",
-                  label: "yiminghe",
-                },
-                {
-                  value: "disabled",
-                  label: "Disabled",
-                  disabled: true,
-                },
+                { label: "Active", value: "active" },
+                { label: "Disabled", value: "disabled" },
               ]}
             />
           </Form.Item>

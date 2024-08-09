@@ -1,7 +1,12 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import React, { useState } from "react";
+import { addNewBranch } from "../../api/branch";
+import { useDispatch } from "react-redux";
+import { addBranch } from "../../redux/slice/BranchSlice";
 
 const ModalAddMajor = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
   const [form] = Form.useForm();
   const showModal = () => {
@@ -10,8 +15,19 @@ const ModalAddMajor = () => {
   const handleOk = () => {
     form.submit();
   };
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    try {
+      const form = {
+        branchName: values.branchName,
+      };
+      const response = await addNewBranch(form);
+      message.success(`Successfully added branch ${form.branchName}`);
+      dispatch(addBranch({ name: response.name, id: response.id }));
+    } catch (error) {
+      console.log(error);
+      messageApi.error(`Failed to add branch ${form.branchName}`);
+    }
+    form.resetFields();
     setIsShowModal(false);
   };
   const onFinishFailed = (values) => {
@@ -23,6 +39,7 @@ const ModalAddMajor = () => {
   };
   return (
     <div className="mb-2">
+      {contextHolder}
       <Button onClick={showModal}>Add new major</Button>
       <Modal
         cancelText="Cancel"
@@ -41,7 +58,7 @@ const ModalAddMajor = () => {
         >
           <Form.Item
             label="Major name"
-            name="majorName"
+            name="branchName"
             rules={[
               {
                 required: true,

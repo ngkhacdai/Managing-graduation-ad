@@ -1,9 +1,13 @@
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { updateTeacher } from "../../api/teacher";
+import { updateTeacherAction } from "../../redux/slice/TeacherSlice";
+import { useDispatch } from "react-redux";
 
-const ModalUpdateTeacher = ({ teacher, closeModal }) => {
+const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
@@ -20,13 +24,37 @@ const ModalUpdateTeacher = ({ teacher, closeModal }) => {
   const clearForm = () => {
     form.resetFields();
   };
-  const handleFinish = () => {
-    console.log("Success:", form.getFieldsValue());
-    clearForm();
+  const handleFinish = async () => {
+    const { email, password, status, userName } = form.getFieldsValue();
+    const formData = {
+      email,
+      status,
+      userName,
+    };
+
+    if (password) {
+      formData.password = password;
+    }
+
+    try {
+      const response = await updateTeacher(teacher.id, formData);
+      // console.log(response);
+      dispatch(updateTeacherAction(response));
+    } catch (error) {
+      console.log(error);
+      alertMessage("Update student failed", "error");
+    }
     setIsModalOpen(false);
+    clearForm();
+
     setTimeout(() => {
       closeModal();
     }, 300);
+  };
+  const onFill = () => {
+    form.setFieldsValue({
+      password: Math.random().toString(36).slice(-8),
+    });
   };
 
   return (
@@ -57,75 +85,55 @@ const ModalUpdateTeacher = ({ teacher, closeModal }) => {
         <Form
           layout="vertical"
           initialValues={{
-            teacherName: teacher.teacherName,
-            teacherEmail: teacher.email,
-            workPlace: teacher.workPlace,
-            degree: teacher.degree,
-            academicRank: teacher.academicRank,
+            userName: teacher.userName,
+            email: teacher.email,
+            status: teacher.status,
           }}
           form={form}
           onFinish={handleFinish}
         >
           <Form.Item
-            label="Teacher name"
+            label="Username"
             rules={[
               {
                 required: true,
-                message: "Please input teacher name!",
+                message: "Please input user name!",
               },
             ]}
-            name="teacherName"
+            name="userName"
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Teacher email"
-            name="teacherEmail"
+            label="Student email"
+            name="email"
             rules={[
               {
+                type: "email",
+                message: "The input is not valid E-mail!",
+              },
+              {
                 required: true,
-                message: "Please input email!",
+                message: "Please input your E-mail!",
               },
             ]}
           >
-            <Input />
+            <Input type="email" />
           </Form.Item>
-          <Form.Item
-            label="Work place"
-            name="workPlace"
-            rules={[
-              {
-                required: true,
-                message: "Please input work place!",
-              },
-            ]}
-          >
-            <Input />
+          <Form.Item label="Active" name="status">
+            <Radio.Group
+              options={[
+                { label: "Active", value: "active" },
+                { label: "Disabled", value: "disabled" },
+              ]}
+            />
           </Form.Item>
-          <Form.Item
-            label="Degree"
-            name="degree"
-            rules={[
-              {
-                required: true,
-                message: "Please input degree!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Academic Rank"
-            name="academicRank"
-            rules={[
-              {
-                required: true,
-                message: "Please input academic rank!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <div className="flex justify-between items-center">
+            <Form.Item label="Password" name="password">
+              <Input disabled className="text-black cursor-default" />
+            </Form.Item>
+            <Button onClick={onFill}>Reset Password</Button>
+          </div>
         </Form>
       </Modal>
     </div>

@@ -1,10 +1,15 @@
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Button, Form, Input, message, Modal, Select } from "antd";
 import React, { useState } from "react";
 import { IoIosPersonAdd } from "react-icons/io";
+import { addTeacher } from "../../api/teacher";
+import { useDispatch } from "react-redux";
+import { addTeacherAction } from "../../redux/slice/TeacherSlice";
 
 const ModalAddTeacher = () => {
+  const [messageAPI, contexHolder] = message.useMessage();
   const [isShowModal, setIsShowModal] = useState(false);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
   const showModal = () => {
     setIsShowModal(true);
   };
@@ -17,24 +22,39 @@ const ModalAddTeacher = () => {
   const handleOk = () => {
     form.submit();
   };
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
   const clearForm = () => {
     form.resetFields();
   };
-  const handleFinish = () => {
+  const handleFinish = async () => {
     console.log("Success:", form.getFieldsValue());
+    try {
+      const response = await addTeacher(form.getFieldValue());
+      console.log(response);
+      dispatch(
+        addTeacherAction({
+          id: response.id,
+          role: response.role.roleName,
+          userName: response.userName,
+          email: response.email,
+          status: response.status,
+        })
+      );
+      messageAPI.success("Add teacher successfully");
+    } catch (error) {
+      console.log(error);
+      messageAPI.error("Add teacher failed");
+    }
     clearForm();
     setIsShowModal(false);
   };
   const onFill = () => {
     form.setFieldsValue({
-      password: Math.random().toString(36).slice(-8),
+      passHashed: Math.random().toString(36).slice(-8),
     });
   };
   return (
     <div>
+      {contexHolder}
       <Button
         type="primary"
         onClick={showModal}
@@ -67,42 +87,46 @@ const ModalAddTeacher = () => {
         <Form
           layout="vertical"
           initialValues={{
-            password: Math.random().toString(36).slice(-8),
+            passHashed: Math.random().toString(36).slice(-8),
           }}
           form={form}
           onFinish={handleFinish}
         >
           <Form.Item
-            label="Teacher name"
+            label="username"
             rules={[
               {
                 required: true,
-                message: "Please input teacher name!",
+                message: "Please input username!",
               },
             ]}
-            name="teacherName"
+            name="userName"
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Teacher email"
-            name="teacherEmail"
+            name="email"
             rules={[
               {
                 required: true,
                 message: "Please input email!",
+              },
+              {
+                type: "email",
+                message: "The input is not valid E-mail!",
               },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Work place"
-            name="workPlace"
+            label="Full name"
+            name="fullName"
             rules={[
               {
                 required: true,
-                message: "Please input work place!",
+                message: "Please input full name!",
               },
             ]}
           >
@@ -121,40 +145,19 @@ const ModalAddTeacher = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Academic Rank"
-            name="academicRank"
+            label="Department"
+            name="department"
             rules={[
               {
                 required: true,
-                message: "Please input academic rank!",
+                message: "Please input department!",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Major" name="teacherMajor">
-            <Select
-              defaultValue="lucy"
-              className="w-full text-center"
-              onChange={handleChange}
-              options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "Yiminghe",
-                  label: "yiminghe",
-                },
-              ]}
-            />
-          </Form.Item>
           <div className="flex justify-between items-center">
-            <Form.Item label="Password" name="password">
+            <Form.Item label="Password" name="passHashed">
               <Input disabled className="text-black cursor-default" />
             </Form.Item>
             <Button onClick={onFill}>Reset Password</Button>

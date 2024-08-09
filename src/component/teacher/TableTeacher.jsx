@@ -1,27 +1,26 @@
-import { Button, Pagination, Popover, Table } from "antd";
-import React, { useState } from "react";
+import { Button, message, Pagination, Popover, Spin, Table } from "antd";
+import React, { useEffect, useState } from "react";
 import { FaUserEdit } from "react-icons/fa";
-import { TiUserDelete } from "react-icons/ti";
 import ModalUpdateTeacher from "./ModalUpdateTeacher";
-import ModalDeleteTeacher from "./ModalDeleteTeacher";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllTeacher } from "../../redux/slice/TeacherSlice";
 
-const TableTeacher = ({ teacherData }) => {
+const TableTeacher = () => {
+  const [messageAPI, contexHolder] = message.useMessage();
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-  const [teachertDelete, setTeacherDelete] = useState([]);
   const [teacherUpdate, setTeacherUpdate] = useState([]);
+  const teacherData = useSelector((state) => state.teacher.teacherData);
+  const loading = useSelector((state) => state.teacher.loading);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllTeacher());
+  }, []);
   const paginationChange = (page) => {
     setCurrentPage(page);
   };
-  const showModalDelelte = (record) => {
-    setTeacherDelete(record);
-    setIsModalDeleteOpen(true);
-  };
-  const closeModalDelete = () => {
-    setTeacherDelete([]);
-    setIsModalDeleteOpen(false);
-  };
+
   const showModalUpdate = (record) => {
     setTeacherUpdate(record);
     setIsModalUpdateOpen(true);
@@ -44,8 +43,8 @@ const TableTeacher = ({ teacherData }) => {
       key: "id",
     },
     {
-      title: "Name",
-      dataIndex: "teacherName",
+      title: "User Name",
+      dataIndex: "userName",
       key: "name",
     },
     {
@@ -54,20 +53,16 @@ const TableTeacher = ({ teacherData }) => {
       key: "email",
     },
     {
-      title: "Work place",
-      key: "workPlace",
-      dataIndex: "workPlace",
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
     },
     {
-      title: "Degree",
-      key: "degree",
-      dataIndex: "degree",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
     },
-    {
-      title: "Academic Rank",
-      key: "academicRank",
-      dataIndex: "academicRank",
-    },
+
     {
       title: "Action",
       key: "action",
@@ -83,48 +78,46 @@ const TableTeacher = ({ teacherData }) => {
                 <FaUserEdit />
               </Button>
             </Popover>
-            <Popover content={<p>Delete teacher</p>}>
-              <Button
-                type="primary"
-                onClick={() => showModalDelelte(record)}
-                className="m-2 bg-red-500 hover:bg-red-400"
-              >
-                <TiUserDelete />
-              </Button>
-            </Popover>
           </div>
         );
       },
     },
   ];
+  const alertMessage = (message, type = "success") => {
+    switch (type) {
+      case "error":
+        messageAPI.error(message);
+        break;
+      case "success":
+        messageAPI.success(message);
+        break;
+      default:
+        messageAPI.info(message);
+        break;
+    }
+  };
+  if (loading) {
+    return <Spin fullscreen />;
+  }
   return (
     <div>
+      {contexHolder}
       <Table
-        rowKey={"id"}
-        scroll={{ x: 800 }}
-        dataSource={teacherData}
         columns={columns}
-        pagination={false}
+        rowKey="id"
+        dataSource={teacherData}
+        scroll={{ x: 800 }}
+        pagination={{
+          onChange: (page) => {
+            paginationChange(page);
+          },
+        }}
       />
-      <div className="flex justify-end mt-2 items-end">
-        <Pagination
-          total={500}
-          defaultCurrent={currentPage}
-          onChange={paginationChange}
-          showSizeChanger={false}
-          responsive={true}
-        />
-      </div>
       {isModalUpdateOpen && (
         <ModalUpdateTeacher
           teacher={teacherUpdate}
           closeModal={() => closeModalUpdate()}
-        />
-      )}
-      {isModalDeleteOpen && (
-        <ModalDeleteTeacher
-          teacher={teachertDelete}
-          closeModal={() => closeModalDelete()}
+          alertMessage={alertMessage}
         />
       )}
     </div>

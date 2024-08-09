@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./pages/Login.page";
 import SideBar from "./component/SideBar";
 import Dashboard from "./pages/Dashboard.page";
@@ -7,24 +7,42 @@ import StudentPage from "./pages/Student.page";
 import TeacherPage from "./pages/Teacher.page";
 import LibraryPage from "./pages/Library.page";
 import MajorPage from "./pages/Major.page";
+import { useEffect } from "react";
+
+function ProtectedRoute({ children }) {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate, token]);
+  return children;
+}
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<SideBar />}>
-            <Route path="/home" element={<Dashboard />} />
-            <Route path="/home/major" element={<MajorPage />} />
-            <Route path="/home/project" element={<ProjectPage />} />
-            <Route path="/home/student" element={<StudentPage />} />
-            <Route path="/home/teacher" element={<TeacherPage />} />
-            {/* <Route path="/home/library" element={<LibraryPage />} /> */}
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <SideBar />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/home" element={<Dashboard />} />
+          <Route path="/home/major" element={<MajorPage />} />
+          <Route path="/home/project" element={<ProjectPage />} />
+          <Route path="/home/student" element={<StudentPage />} />
+          <Route path="/home/teacher" element={<TeacherPage />} />
+          {/* <Route path="/home/library" element={<LibraryPage />} /> */}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

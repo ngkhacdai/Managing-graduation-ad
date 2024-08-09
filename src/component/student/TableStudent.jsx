@@ -1,16 +1,26 @@
-import { Button, Pagination, Popover, Table } from "antd";
-import React, { useState } from "react";
+import { Button, message, Pagination, Popover, Spin, Table } from "antd";
+import React, { useState, useEffect } from "react";
 import { FaUserEdit } from "react-icons/fa";
 import { TiUserDelete } from "react-icons/ti";
 import ModalDeleteStudent from "./ModalDeleteStudent";
 import ModalUpdateStudent from "./ModalUpdateStudent";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllStudent } from "../../redux/slice/StudentSlice";
 
-const TableStudent = ({ studentData }) => {
+const TableStudent = () => {
+  const [messageAPI, contexHolder] = message.useMessage();
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   const [studentDelete, setStudentDelete] = useState([]);
   const [studentUpdate, setStudentUpdate] = useState([]);
+  const studentData = useSelector((state) => state.student.studentData);
+  const loading = useSelector((state) => state.student.loading);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllStudent());
+  }, []);
   const showModalDelelte = (record) => {
     setStudentDelete(record);
     setIsModalDeleteOpen(true);
@@ -27,6 +37,19 @@ const TableStudent = ({ studentData }) => {
     setStudentUpdate([]);
     setIsModalUpdateOpen(false);
   };
+  const alertMessage = (message, type = "success") => {
+    switch (type) {
+      case "error":
+        messageAPI.error(message);
+        break;
+      case "success":
+        messageAPI.success(message);
+        break;
+      default:
+        messageAPI.info(message);
+        break;
+    }
+  };
   const columns = [
     {
       title: "No",
@@ -41,8 +64,8 @@ const TableStudent = ({ studentData }) => {
       key: "id",
     },
     {
-      title: "Name",
-      dataIndex: "studentName",
+      title: "User Name",
+      dataIndex: "userName",
       key: "name",
     },
     {
@@ -51,27 +74,28 @@ const TableStudent = ({ studentData }) => {
       key: "email",
     },
     {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
       title: "Action",
       key: "action",
       render: (record, text, index) => {
         return (
           <>
-            <Popover content={<p>Edit Sutdent</p>}>
+            <Popover className="m-2" content={<p>Edit Sutdent</p>}>
               <Button
                 type="primary"
                 onClick={() => showModalUpdate(record)}
                 className="mx-2 bg-yellow-500 hover:bg-yellow-400"
               >
                 <FaUserEdit />
-              </Button>
-            </Popover>
-            <Popover content={<p>Delete Sutdent</p>}>
-              <Button
-                type="primary"
-                onClick={() => showModalDelelte(record)}
-                className="mx-2 bg-red-500 hover:bg-red-400"
-              >
-                <TiUserDelete />
               </Button>
             </Popover>
           </>
@@ -82,34 +106,36 @@ const TableStudent = ({ studentData }) => {
   const paginationChange = (page) => {
     setCurrentPage(page);
   };
+  if (loading) {
+    return <Spin fullscreen />;
+  }
   return (
     <div>
+      {contexHolder}
       <Table
-        dataSource={studentData}
-        rowKey={"id"}
         columns={columns}
-        pagination={false}
+        rowKey="id"
+        dataSource={studentData}
         scroll={{ x: 600 }}
+        pagination={{
+          onChange: (page) => {
+            paginationChange(page);
+          },
+        }}
       />
-      <div className="flex justify-end mt-2 items-end">
-        <Pagination
-          total={500}
-          defaultCurrent={currentPage}
-          onChange={paginationChange}
-          showSizeChanger={false}
-          responsive={true}
-        />
-      </div>
+
       {isModalDeleteOpen && (
         <ModalDeleteStudent
           student={studentDelete}
           closeModal={() => closeModalDelete()}
+          alertMessage={alertMessage}
         />
       )}
       {isModalUpdateOpen && (
         <ModalUpdateStudent
           student={studentUpdate}
           closeModal={() => closeModalUpdate()}
+          alertMessage={alertMessage}
         />
       )}
     </div>

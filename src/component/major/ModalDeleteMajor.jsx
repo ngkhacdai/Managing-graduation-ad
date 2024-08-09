@@ -1,13 +1,28 @@
 import { Modal } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteBranch } from "../../api/branch";
+import { deleteBranchAction } from "../../redux/slice/BranchSlice";
 
-const ModalDeleteMajor = ({ major, closeModal }) => {
+const ModalDeleteMajor = ({ major, closeModal, alertMessage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const handleOk = async () => {
+    try {
+      await deleteBranch(major.id);
+      dispatch(deleteBranchAction({ id: major.id }));
+      alertMessage("Delete major successfully", "success");
+      setIsModalOpen(false);
+      setTimeout(() => {
+        closeModal();
+      }, 300);
+    } catch (error) {
+      console.log(error);
+      messageAPI.error("Delete major failed");
+    }
   };
   const handleCancel = () => {
     setIsModalOpen(false);
