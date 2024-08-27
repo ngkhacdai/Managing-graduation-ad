@@ -42,7 +42,7 @@ const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
       dispatch(updateTeacherAction(response));
     } catch (error) {
       console.log(error);
-      alertMessage("Update student failed", "error");
+      alertMessage(error.message, "error");
     }
     setIsModalOpen(false);
     clearForm();

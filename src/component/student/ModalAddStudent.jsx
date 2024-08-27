@@ -13,7 +13,7 @@ const ModalAddStudent = () => {
   const dispatch = useDispatch();
   const major = useSelector((state) => state.branch.data);
   const option = major.map((item) => {
-    return { value: item.name, label: item.name };
+    return { value: item.id, label: item.name };
   });
 
   useEffect(() => {
@@ -38,15 +38,15 @@ const ModalAddStudent = () => {
     form.resetFields();
   };
   const handleFinish = async () => {
-    const { userName, studentId, password, majors, fullName, email } =
+    const { userName, studentId, branchId, fullName, email } =
       form.getFieldsValue();
     const formData = {
       userName: userName,
-      passHashed: password,
+      // passHashed: password,
       email: email,
       fullName: fullName,
       studentId: studentId,
-      majors: majors,
+      branchId: branchId,
     };
     try {
       const response = await addStudent(formData);
@@ -57,12 +57,13 @@ const ModalAddStudent = () => {
           role: response.role.roleName,
           userName: response.userName,
           email: response.email,
+          status: response.status,
         })
       );
       messageAPI.success("Add student successfully");
     } catch (error) {
       console.log(error);
-      messageAPI.error("Add student failed");
+      messageAPI.error(error.message);
     }
     clearForm();
     setIsShowModal(false);
@@ -108,7 +109,7 @@ const ModalAddStudent = () => {
           layout="vertical"
           initialValues={{
             password: Math.random().toString(36).slice(-8),
-            majors: null,
+            branchId: "",
           }}
           form={form}
           onFinish={handleFinish}
@@ -166,8 +167,8 @@ const ModalAddStudent = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Major"
-            name="majors"
+            label="Branch"
+            name="branchId"
             rules={[
               {
                 validator: (_, value) =>
@@ -183,12 +184,12 @@ const ModalAddStudent = () => {
               options={[{ value: "", label: "Select Major" }, ...option]}
             />
           </Form.Item>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <Form.Item label="Password" name="password">
               <Input disabled className="text-black cursor-default" />
             </Form.Item>
             <Button onClick={onFill}>Reset Password</Button>
-          </div>
+          </div> */}
         </Form>
       </Modal>
     </div>

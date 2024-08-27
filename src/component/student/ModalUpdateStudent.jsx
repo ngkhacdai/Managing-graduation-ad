@@ -42,7 +42,7 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
       dispatch(updateStudentAction(response));
     } catch (error) {
       console.log(error);
-      alertMessage("Update student failed", "error");
+      alertMessage(error.message, "error");
     }
     setIsModalOpen(false);
     clearForm();
@@ -66,20 +66,20 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
         onCancel={handleCancel}
         open={isModalOpen}
         title="Update student"
-        footer={
-          <div>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button
-              onClick={clearForm}
-              className="mx-2 text-white bg-red-500 hover:bg-red-300"
-            >
-              Clear Form
-            </Button>
-            <Button onClick={handleOk} type="primary">
-              Update
-            </Button>
-          </div>
-        }
+        // footer={
+        //   <div>
+        //     <Button onClick={handleCancel}>Cancel</Button>
+        //     <Button
+        //       onClick={clearForm}
+        //       className="mx-2 text-white bg-red-500 hover:bg-red-300"
+        //     >
+        //       Clear Form
+        //     </Button>
+        //     <Button onClick={handleOk} type="primary">
+        //       Update
+        //     </Button>
+        //   </div>
+        // }
       >
         <Form
           layout="vertical"

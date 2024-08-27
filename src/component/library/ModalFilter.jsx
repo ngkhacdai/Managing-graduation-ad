@@ -5,25 +5,26 @@ import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataBranch } from "../../redux/slice/BranchSlice";
 
-const ModalFilter = ({ filter }) => {
+const ModalFilter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ckbStatus, setCkbStatus] = useState([]);
   const [tempStatus, setTempStatus] = useState([]);
   const [ckbBranch, setCkbBranch] = useState([]);
   const [tempBranch, setTempBranch] = useState([]);
   const [form] = useForm();
-
   const listBranch = useSelector((state) => state.branch.data);
   const dispatch = useDispatch();
 
   const getBranchData = async () => {
     dispatch(fetchDataBranch());
   };
+
   useEffect(() => {
     if (listBranch <= 0) {
       getBranchData();
     }
   }, []);
+
   const showModal = () => {
     form.setFieldsValue({ status: ckbStatus, branch: ckbBranch });
     setIsModalOpen(true);
@@ -47,11 +48,11 @@ const ModalFilter = ({ filter }) => {
   };
 
   const onStatusChange = (checkedValues) => {
-    setTempStatus(checkedValues);
+    setTempStatus(checkedValues); // Cập nhật giá trị tạm thời cho status
   };
 
   const onBranchChange = (checkedValues) => {
-    setTempBranch(checkedValues);
+    setTempBranch(checkedValues); // Cập nhật giá trị tạm thời cho branch
   };
 
   return (
@@ -82,10 +83,10 @@ const ModalFilter = ({ filter }) => {
             >
               <Row>
                 <Col className="m-1">
-                  <Checkbox value="Processing">Processing</Checkbox>
+                  <Checkbox value="Public">Public</Checkbox>
                 </Col>
                 <Col className="m-1">
-                  <Checkbox value="Reviewing">Reviewing</Checkbox>
+                  <Checkbox value="Private">Private</Checkbox>
                 </Col>
               </Row>
             </Checkbox.Group>

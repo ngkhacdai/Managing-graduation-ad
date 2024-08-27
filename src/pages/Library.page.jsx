@@ -1,7 +1,12 @@
 import React from "react";
+import LibraryScreen from "../component/library/Library.screen";
 
 const LibraryPage = () => {
-  return <div>LibraryPage</div>;
+  return (
+    <div>
+      <LibraryScreen />
+    </div>
+  );
 };
 
 export default LibraryPage;

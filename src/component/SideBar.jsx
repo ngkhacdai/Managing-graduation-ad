@@ -7,7 +7,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard, MdOutlineLocalLibrary } from "react-icons/md";
 import {
   FaChalkboardTeacher,
@@ -17,11 +17,16 @@ import {
 import { PiStudentBold } from "react-icons/pi";
 const { Header, Sider, Content } = Layout;
 const SideBar = () => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   let location = useLocation();
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <div>
       <Layout>
@@ -62,11 +67,11 @@ const SideBar = () => {
                 icon: <FaChalkboardTeacher />,
                 label: <Link to={"teacher"}>Teacher</Link>,
               },
-              // {
-              //   key: "/home/library",
-              //   icon: <MdOutlineLocalLibrary />,
-              //   label: <Link to={"library"}>Library</Link>,
-              // },
+              {
+                key: "/home/library",
+                icon: <MdOutlineLocalLibrary />,
+                label: <Link to={"library"}>Library</Link>,
+              },
             ]}
           />
         </Sider>
@@ -104,7 +109,9 @@ const SideBar = () => {
                   ? "Teacher"
                   : location.pathname === "/home/library" && "Library"}
               </p>
-              <Button className="mx-2">Log out</Button>
+              <Button className="mx-2" onClick={logout}>
+                Log out
+              </Button>
             </div>
           </Header>
 

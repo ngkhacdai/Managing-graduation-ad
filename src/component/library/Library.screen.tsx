@@ -1,18 +1,14 @@
-import { Button, Pagination, Table } from "antd";
+import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
-
 import HeaderProject from "./HeaderProject";
 import ModalDetail from "./ModalDetail";
-import { getProjectNotDone } from "../../api/project";
+import { getProjectDone } from "../../api/project";
 
-const ProjectScreen = () => {
-  const [projectData, setProjectData] = useState([]);
+const LibraryScreen = () => {
+  const [projectData, setProjectData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailProject, setDetailProject] = useState([]);
-
   const getProjectData = async () => {
-    const response = await getProjectNotDone();
+    const response = await getProjectDone();
     setProjectData(response);
   };
 
@@ -46,22 +42,25 @@ const ProjectScreen = () => {
       key: "mentor",
     },
     {
-      title: "Status",
-      key: "status",
-      render: (record) => {
-        return <p>{record.completed ? "Finished" : "Processing"}</p>;
-      },
-    },
-    {
       title: "Start date",
-      dataIndex: "startDate",
+      dataIndex: "startTime",
       key: "startDate",
     },
     {
       title: "End date",
+      dataIndex: "endTime",
       key: "endDate",
+    },
+    {
+      title: "Point",
+      dataIndex: "point",
+      key: "point",
+    },
+    {
+      title: "Public",
+      key: "public",
       render: (record) => {
-        return <p>{record.endDate ? record.endDate : "Not finish"}</p>;
+        return <p>{record.public ? "Public" : "Private"}</p>;
       },
     },
     {
@@ -77,14 +76,6 @@ const ProjectScreen = () => {
     setCurrentPage(page);
   };
 
-  const showDetail = (item) => {
-    setDetailProject(item);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setDetailProject([]);
-    setIsModalOpen(false);
-  };
   return (
     <div>
       <HeaderProject />
@@ -94,6 +85,7 @@ const ProjectScreen = () => {
         rowKey="id"
         dataSource={projectData}
         pagination={{
+          total: 500,
           defaultCurrent: currentPage,
           onChange: paginationChange,
           showSizeChanger: false,
@@ -104,4 +96,4 @@ const ProjectScreen = () => {
   );
 };
 
-export default ProjectScreen;
+export default LibraryScreen;

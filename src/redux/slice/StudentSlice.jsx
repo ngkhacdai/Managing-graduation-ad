@@ -22,7 +22,7 @@ const studentSlice = createSlice({
       state.studentData = [action.payload, ...state.studentData];
     },
     updateStudentAction: (state, action) => {
-      const { id, email, status, userName, role } = action.payload;
+      const { id, email, status, userName } = action.payload;
       const index = state.studentData.findIndex((student) => student.id === id);
 
       if (index !== -1) {

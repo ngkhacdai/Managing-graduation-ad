@@ -5,7 +5,7 @@ export const addNewBranch = (form) => {
 };
 
 export const getBranchByPage = () => {
-  return axios.get(`/admin/getBranch`);
+  return axios.get(`/getAllBranch`);
 };
 
 export const updateBranch = (form, id) => {

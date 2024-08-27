@@ -1,15 +1,24 @@
 import { Button, Form, Input, message, Modal, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosPersonAdd } from "react-icons/io";
 import { addTeacher } from "../../api/teacher";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTeacherAction } from "../../redux/slice/TeacherSlice";
+import { fetchDataBranch } from "../../redux/slice/BranchSlice";
 
 const ModalAddTeacher = () => {
   const [messageAPI, contexHolder] = message.useMessage();
   const [isShowModal, setIsShowModal] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const major = useSelector((state) => state.branch.data);
+  const option = major.map((item) => {
+    return { value: item.id, label: item.name };
+  });
+
+  useEffect(() => {
+    dispatch(fetchDataBranch());
+  }, []);
   const showModal = () => {
     setIsShowModal(true);
   };
@@ -42,7 +51,7 @@ const ModalAddTeacher = () => {
       messageAPI.success("Add teacher successfully");
     } catch (error) {
       console.log(error);
-      messageAPI.error("Add teacher failed");
+      messageAPI.error(error.message);
     }
     clearForm();
     setIsShowModal(false);
@@ -88,6 +97,7 @@ const ModalAddTeacher = () => {
           layout="vertical"
           initialValues={{
             passHashed: Math.random().toString(36).slice(-8),
+            branchId: "",
           }}
           form={form}
           onFinish={handleFinish}
@@ -145,23 +155,26 @@ const ModalAddTeacher = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Department"
-            name="department"
+            label="Branch"
+            name="branchId"
             rules={[
               {
                 required: true,
-                message: "Please input department!",
+                message: "Please input branch!",
               },
             ]}
           >
-            <Input />
+            <Select
+              className="w-full text-center"
+              options={[{ value: "", label: "Select Major" }, ...option]}
+            />
           </Form.Item>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <Form.Item label="Password" name="passHashed">
               <Input disabled className="text-black cursor-default" />
             </Form.Item>
             <Button onClick={onFill}>Reset Password</Button>
-          </div>
+          </div> */}
         </Form>
       </Modal>
     </div>

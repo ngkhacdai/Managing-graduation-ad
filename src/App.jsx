@@ -1,4 +1,10 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./pages/Login.page";
 import SideBar from "./component/SideBar";
 import Dashboard from "./pages/Dashboard.page";
@@ -8,17 +14,23 @@ import TeacherPage from "./pages/Teacher.page";
 import LibraryPage from "./pages/Library.page";
 import MajorPage from "./pages/Major.page";
 import { useEffect } from "react";
+import PreviewPage from "./pages/Preview.page";
+import locale from "antd/es/date-picker/locale/en_US";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
+  const locate = useLocation();
   const token = localStorage.getItem("token");
-
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
+    // const invalid = ["/", "/view"];
+    // if (!invalid.includes(locate.pathname)) {
+    //   if (!token) {
+    //     navigate("/");
+    //   }
+    // }
   }, [navigate, token]);
-  return children;
+
+  return token ? children : null;
 }
 
 function App() {
@@ -26,6 +38,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/view" element={<PreviewPage />} />
         <Route
           path="/home"
           element={
@@ -34,12 +47,12 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/home" element={<Dashboard />} />
-          <Route path="/home/major" element={<MajorPage />} />
-          <Route path="/home/project" element={<ProjectPage />} />
-          <Route path="/home/student" element={<StudentPage />} />
-          <Route path="/home/teacher" element={<TeacherPage />} />
-          {/* <Route path="/home/library" element={<LibraryPage />} /> */}
+          <Route index element={<Dashboard />} />
+          <Route path="major" element={<MajorPage />} />
+          <Route path="project" element={<ProjectPage />} />
+          <Route path="student" element={<StudentPage />} />
+          <Route path="teacher" element={<TeacherPage />} />
+          <Route path="library" element={<LibraryPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
