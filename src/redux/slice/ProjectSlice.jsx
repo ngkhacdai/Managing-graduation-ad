@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProjectDone } from "../../api/project";
+import { getProjectNotDone } from "../../api/project";
 const initialState = {
   project: [],
   filter: [],
@@ -9,12 +9,12 @@ const initialState = {
 export const fetchProject = createAsyncThunk(
   "librarySlice/fetchProject",
   async () => {
-    const response = await getProjectDone();
+    const response = await getProjectNotDone();
     return response;
   }
 );
 
-const librarySlice = createSlice({
+const projectSlice = createSlice({
   name: "librarySlice",
   initialState,
   reducers: {
@@ -29,6 +29,6 @@ const librarySlice = createSlice({
   },
 });
 
-export const { saveFilter } = librarySlice.actions;
+export const { saveFilter } = projectSlice.actions;
 
-export default librarySlice.reducer;
+export default projectSlice.reducer;

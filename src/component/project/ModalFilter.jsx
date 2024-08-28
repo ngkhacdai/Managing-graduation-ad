@@ -1,57 +1,46 @@
 import { Button, Checkbox, Col, Form, Modal, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { getBranchByPage } from "../../api/branch";
-import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataBranch } from "../../redux/slice/BranchSlice";
+import { saveFilter } from "../../redux/slice/ProjectSlice";
 
-const ModalFilter = ({ filter }) => {
+const ModalFilter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ckbStatus, setCkbStatus] = useState([]);
-  const [tempStatus, setTempStatus] = useState([]);
-  const [ckbBranch, setCkbBranch] = useState([]);
-  const [tempBranch, setTempBranch] = useState([]);
-  const [form] = useForm();
-
+  const [form] = Form.useForm();
   const listBranch = useSelector((state) => state.branch.data);
+  const filter = useSelector((state) => state.project.filter);
   const dispatch = useDispatch();
+  console.log(filter);
 
   const getBranchData = async () => {
     dispatch(fetchDataBranch());
   };
+
   useEffect(() => {
     if (listBranch <= 0) {
       getBranchData();
     }
   }, []);
+
   const showModal = () => {
-    form.setFieldsValue({ status: ckbStatus, branch: ckbBranch });
     setIsModalOpen(true);
+    form.setFieldsValue(filter);
   };
 
   const handleOk = () => {
     form.submit();
-    setCkbStatus(tempStatus);
-    setCkbBranch(tempBranch);
     setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setTempStatus(ckbStatus);
-    setTempBranch(ckbBranch);
     setIsModalOpen(false);
   };
 
   const submitForm = () => {
-    console.log(form.getFieldsValue());
-  };
+    console.log("value", form.getFieldsValue());
 
-  const onStatusChange = (checkedValues) => {
-    setTempStatus(checkedValues);
-  };
-
-  const onBranchChange = (checkedValues) => {
-    setTempBranch(checkedValues);
+    dispatch(saveFilter(form.getFieldsValue()));
   };
 
   return (
@@ -68,8 +57,8 @@ const ModalFilter = ({ filter }) => {
           onFinish={submitForm}
           layout="vertical"
           initialValues={{
-            status: ckbStatus,
-            branch: ckbBranch,
+            status: filter.status,
+            branch: filter.branch,
           }}
           className="select-none"
         >
@@ -78,7 +67,6 @@ const ModalFilter = ({ filter }) => {
               style={{
                 width: "100%",
               }}
-              onChange={onStatusChange}
             >
               <Row>
                 <Col className="m-1">
@@ -95,7 +83,6 @@ const ModalFilter = ({ filter }) => {
               style={{
                 width: "100%",
               }}
-              onChange={onBranchChange}
             >
               <Row>
                 {listBranch.length > 0 &&

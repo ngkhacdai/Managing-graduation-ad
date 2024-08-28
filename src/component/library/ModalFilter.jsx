@@ -1,18 +1,15 @@
 import { Button, Checkbox, Col, Form, Modal, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import { getBranchByPage } from "../../api/branch";
 import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataBranch } from "../../redux/slice/BranchSlice";
+import { saveFilter } from "../../redux/slice/Library.slice";
 
 const ModalFilter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ckbStatus, setCkbStatus] = useState([]);
-  const [tempStatus, setTempStatus] = useState([]);
-  const [ckbBranch, setCkbBranch] = useState([]);
-  const [tempBranch, setTempBranch] = useState([]);
   const [form] = useForm();
   const listBranch = useSelector((state) => state.branch.data);
+  const filter = useSelector((state) => state.library.filter);
   const dispatch = useDispatch();
 
   const getBranchData = async () => {
@@ -26,33 +23,21 @@ const ModalFilter = () => {
   }, []);
 
   const showModal = () => {
-    form.setFieldsValue({ status: ckbStatus, branch: ckbBranch });
     setIsModalOpen(true);
+    form.setFieldsValue(filter);
   };
 
   const handleOk = () => {
     form.submit();
-    setCkbStatus(tempStatus);
-    setCkbBranch(tempBranch);
     setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setTempStatus(ckbStatus);
-    setTempBranch(ckbBranch);
     setIsModalOpen(false);
   };
 
   const submitForm = () => {
-    console.log(form.getFieldsValue());
-  };
-
-  const onStatusChange = (checkedValues) => {
-    setTempStatus(checkedValues); // Cập nhật giá trị tạm thời cho status
-  };
-
-  const onBranchChange = (checkedValues) => {
-    setTempBranch(checkedValues); // Cập nhật giá trị tạm thời cho branch
+    dispatch(saveFilter(form.getFieldsValue()));
   };
 
   return (
@@ -69,8 +54,8 @@ const ModalFilter = () => {
           onFinish={submitForm}
           layout="vertical"
           initialValues={{
-            status: ckbStatus,
-            branch: ckbBranch,
+            status: filter.status,
+            branch: filter.branch,
           }}
           className="select-none"
         >
@@ -79,7 +64,6 @@ const ModalFilter = () => {
               style={{
                 width: "100%",
               }}
-              onChange={onStatusChange}
             >
               <Row>
                 <Col className="m-1">
@@ -96,7 +80,6 @@ const ModalFilter = () => {
               style={{
                 width: "100%",
               }}
-              onChange={onBranchChange}
             >
               <Row>
                 {listBranch.length > 0 &&

@@ -15,19 +15,18 @@ import LibraryPage from "./pages/Library.page";
 import MajorPage from "./pages/Major.page";
 import { useEffect } from "react";
 import PreviewPage from "./pages/Preview.page";
-import locale from "antd/es/date-picker/locale/en_US";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const locate = useLocation();
   const token = localStorage.getItem("token");
   useEffect(() => {
-    // const invalid = ["/", "/view"];
-    // if (!invalid.includes(locate.pathname)) {
-    //   if (!token) {
-    //     navigate("/");
-    //   }
-    // }
+    const invalid = ["/", "/view"];
+    if (!invalid.includes(locate.pathname)) {
+      if (!token) {
+        navigate("/");
+      }
+    }
   }, [navigate, token]);
 
   return token ? children : null;

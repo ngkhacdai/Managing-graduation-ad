@@ -3,17 +3,16 @@ import React, { useEffect, useState } from "react";
 
 import HeaderProject from "./HeaderProject";
 import ModalDetail from "./ModalDetail";
-import { getProjectNotDone } from "../../api/project";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProject } from "../../redux/slice/ProjectSlice";
 
 const ProjectScreen = () => {
-  const [projectData, setProjectData] = useState([]);
+  const dispatch = useDispatch();
+  const projectData = useSelector((state) => state.library.project);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailProject, setDetailProject] = useState([]);
 
   const getProjectData = async () => {
-    const response = await getProjectNotDone();
-    setProjectData(response);
+    dispatch(fetchProject());
   };
 
   useEffect(() => {
@@ -77,14 +76,6 @@ const ProjectScreen = () => {
     setCurrentPage(page);
   };
 
-  const showDetail = (item) => {
-    setDetailProject(item);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setDetailProject([]);
-    setIsModalOpen(false);
-  };
   return (
     <div>
       <HeaderProject />

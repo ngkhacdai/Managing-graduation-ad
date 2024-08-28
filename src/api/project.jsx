@@ -5,6 +5,8 @@ export const getProjectNotDone = async () => {
   return response;
 };
 export const getProjectDone = async () => {
-  const response = await axios.get("/admin/getListProjectDone");
+  const response = await axios
+    .get("/admin/getListProjectDone")
+    .catch((err) => console.log(err));
   return response;
 };
