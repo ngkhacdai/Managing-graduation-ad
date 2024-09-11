@@ -1,5 +1,6 @@
 import { Button, Pagination, Table } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import debounce from "lodash/debounce";
 
 import HeaderProject from "./HeaderProject";
 import ModalDetail from "./ModalDetail";
@@ -8,16 +9,21 @@ import { fetchProject } from "../../redux/slice/ProjectSlice";
 
 const ProjectScreen = () => {
   const dispatch = useDispatch();
-  const projectData = useSelector((state) => state.library.project);
+  const projectData = useSelector((state) => state.project.project);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getProjectData = async () => {
-    dispatch(fetchProject());
-  };
+  const debounceGetProjectData = useCallback(
+    debounce(() => dispatch(fetchProject()), 300),
+    [dispatch]
+  );
 
   useEffect(() => {
-    getProjectData();
-  }, []);
+    debounceGetProjectData();
+
+    return () => {
+      debounceGetProjectData.cancel();
+    };
+  }, [debounceGetProjectData]);
 
   const columns = [
     {
@@ -67,7 +73,11 @@ const ProjectScreen = () => {
       title: "Detail",
       key: "detail",
       render: (record) => {
-        return <ModalDetail />;
+        return (
+          <>
+            <ModalDetail completed={record.completed} projectId={record.id} />
+          </>
+        );
       },
     },
   ];
@@ -80,7 +90,7 @@ const ProjectScreen = () => {
     <div>
       <HeaderProject />
       <Table
-        scroll={{ x: 600 }}
+        scroll={{ x: 900 }}
         columns={columns}
         rowKey="id"
         dataSource={projectData}

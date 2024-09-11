@@ -1,27 +1,22 @@
 import { Button, Checkbox, Col, Form, Modal, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import { getBranchByPage } from "../../api/branch";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataBranch } from "../../redux/slice/BranchSlice";
-import { saveFilter } from "../../redux/slice/ProjectSlice";
+import { fillter, saveFilter } from "../../redux/slice/ProjectSlice";
 
 const ModalFilter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const listBranch = useSelector((state) => state.branch.data);
   const filter = useSelector((state) => state.project.filter);
+  const keyword = useSelector((state) => state.project.searchInput);
   const dispatch = useDispatch();
-  console.log(filter);
-
-  const getBranchData = async () => {
-    dispatch(fetchDataBranch());
-  };
 
   useEffect(() => {
-    if (listBranch <= 0) {
-      getBranchData();
+    if (listBranch.length === 0) {
+      dispatch(fetchDataBranch());
     }
-  }, []);
+  }, [listBranch.length, dispatch]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -38,9 +33,14 @@ const ModalFilter = () => {
   };
 
   const submitForm = () => {
-    console.log("value", form.getFieldsValue());
-
-    dispatch(saveFilter(form.getFieldsValue()));
+    const value = form.getFieldsValue();
+    dispatch(saveFilter(value));
+    const formData = {
+      keyword,
+      branch: value.branch,
+      status: value.status,
+    };
+    dispatch(fillter(formData));
   };
 
   return (
@@ -56,34 +56,22 @@ const ModalFilter = () => {
           form={form}
           onFinish={submitForm}
           layout="vertical"
-          initialValues={{
-            status: filter.status,
-            branch: filter.branch,
-          }}
           className="select-none"
         >
           <Form.Item label="Status" name="status">
-            <Checkbox.Group
-              style={{
-                width: "100%",
-              }}
-            >
+            <Checkbox.Group style={{ width: "100%" }}>
               <Row>
                 <Col className="m-1">
-                  <Checkbox value="Processing">Processing</Checkbox>
+                  <Checkbox value="0">Processing</Checkbox>
                 </Col>
                 <Col className="m-1">
-                  <Checkbox value="Reviewing">Reviewing</Checkbox>
+                  <Checkbox value="1">Reviewing</Checkbox>
                 </Col>
               </Row>
             </Checkbox.Group>
           </Form.Item>
           <Form.Item name="branch" label="Branches">
-            <Checkbox.Group
-              style={{
-                width: "100%",
-              }}
-            >
+            <Checkbox.Group style={{ width: "100%" }}>
               <Row>
                 {listBranch.length > 0 &&
                   listBranch.map((item) => (

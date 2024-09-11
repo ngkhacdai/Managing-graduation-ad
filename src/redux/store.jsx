@@ -5,6 +5,7 @@ import StudentReducer from "./slice/StudentSlice";
 import TeacherReducer from "./slice/TeacherSlice";
 import LibraryReducer from "./slice/Library.slice";
 import ProjectReducer from "./slice/ProjectSlice";
+import SessionReducer from "./slice/SessionSlice";
 export const store = configureStore({
   reducer: {
     dashBoard: dashBoardReducer,
@@ -13,5 +14,6 @@ export const store = configureStore({
     teacher: TeacherReducer,
     library: LibraryReducer,
     project: ProjectReducer,
+    session: SessionReducer,
   },
 });

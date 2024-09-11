@@ -12,6 +12,7 @@ const LibraryScreen = () => {
   const getProjectData = async () => {
     dispatch(fetchProject());
   };
+  console.log(projectData);
 
   useEffect(() => {
     getProjectData();
@@ -68,7 +69,7 @@ const LibraryScreen = () => {
       title: "Detail",
       key: "detail",
       render: (record) => {
-        return <ModalDetail />;
+        return <ModalDetail projectId={record.id} isPublic={record.public} />;
       },
     },
   ];

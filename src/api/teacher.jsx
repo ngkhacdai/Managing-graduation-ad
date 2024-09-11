@@ -9,5 +9,5 @@ export const addTeacher = async (form) => {
 };
 
 export const updateTeacher = async (id, form) => {
-  return await axios.patch(`/admin/updateUser/${id}`, form);
+  return await axios.patch(`/admin/updateMenteesLimit/${id}`, form);
 };

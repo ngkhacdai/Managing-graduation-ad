@@ -15,7 +15,7 @@ import LibraryPage from "./pages/Library.page";
 import MajorPage from "./pages/Major.page";
 import { useEffect } from "react";
 import PreviewPage from "./pages/Preview.page";
-
+import Session from "./pages/Session.page";
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const locate = useLocation();
@@ -49,6 +49,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="major" element={<MajorPage />} />
           <Route path="project" element={<ProjectPage />} />
+          <Route path="session" element={<Session />} />
           <Route path="student" element={<StudentPage />} />
           <Route path="teacher" element={<TeacherPage />} />
           <Route path="library" element={<LibraryPage />} />

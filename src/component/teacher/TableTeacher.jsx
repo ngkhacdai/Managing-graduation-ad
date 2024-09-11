@@ -1,9 +1,18 @@
-import { Button, message, Pagination, Popover, Spin, Table } from "antd";
+import {
+  Button,
+  message,
+  Pagination,
+  Popover,
+  Spin,
+  Table,
+  Tooltip,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { FaUserEdit } from "react-icons/fa";
 import ModalUpdateTeacher from "./ModalUpdateTeacher";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTeacher } from "../../redux/slice/TeacherSlice";
+import ModalDetail from "./ModalDetail";
 
 const TableTeacher = () => {
   const [messageAPI, contexHolder] = message.useMessage();
@@ -13,6 +22,7 @@ const TableTeacher = () => {
   const teacherData = useSelector((state) => state.teacher.teacherData);
   const loading = useSelector((state) => state.teacher.loading);
   const dispatch = useDispatch();
+  console.log("Teacher Data", teacherData);
 
   useEffect(() => {
     dispatch(getAllTeacher());
@@ -38,11 +48,6 @@ const TableTeacher = () => {
       },
     },
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "User Name",
       dataIndex: "userName",
       key: "name",
@@ -62,14 +67,19 @@ const TableTeacher = () => {
       dataIndex: "status",
       key: "status",
     },
-
+    {
+      title: "Mentee limit",
+      dataIndex: "limitOfMentees",
+      key: "menteeLimit",
+    },
     {
       title: "Action",
       key: "action",
       render: (record, text, index) => {
         return (
-          <div>
-            <Popover content={<p>Update teacher</p>}>
+          <div className="flex items-center">
+            <ModalDetail profile={record} />
+            <Tooltip title={<p>Update teacher</p>}>
               <Button
                 type="primary"
                 onClick={() => showModalUpdate(record)}
@@ -77,7 +87,7 @@ const TableTeacher = () => {
               >
                 <FaUserEdit />
               </Button>
-            </Popover>
+            </Tooltip>
           </div>
         );
       },
@@ -104,7 +114,7 @@ const TableTeacher = () => {
       {contexHolder}
       <Table
         columns={columns}
-        rowKey="id"
+        rowKey="accountId"
         dataSource={teacherData}
         scroll={{ x: 800 }}
         pagination={{

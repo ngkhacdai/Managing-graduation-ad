@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const ChartStudent = () => {
+const ChartStudent = ({ dataForDashBoardByYearViews }) => {
   const data = [
     {
       name: "January",
@@ -86,7 +86,7 @@ const ChartStudent = () => {
         <LineChart
           width={500}
           height={300}
-          data={data}
+          data={dataForDashBoardByYearViews}
           margin={{
             top: 10,
             right: 30,
@@ -95,35 +95,35 @@ const ChartStudent = () => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="year" />
           <YAxis />
           <Tooltip />
           <Legend layout="horizontal" verticalAlign="bottom" align="center" />
           <Line
             connectNulls
             type="monotone"
-            dataKey="Processing"
+            dataKey="processing"
             stroke="#0088FE" // Blue color
             fill="#0088FE"
           />
           <Line
             connectNulls
             type="monotone"
-            dataKey="Private"
+            dataKey="isPrivate"
             stroke="#00C49F" // Green color
             fill="#00C49F"
           />
           <Line
             connectNulls
             type="monotone"
-            dataKey="Public"
+            dataKey="isPublic"
             stroke="#FFBB28" // Yellow color
             fill="#FFBB28"
           />
           <Line
             connectNulls
             type="monotone"
-            dataKey="Reviewing"
+            dataKey="reviewing"
             stroke="#FF8042" // Orange color
             fill="#FF8042"
           />
