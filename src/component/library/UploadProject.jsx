@@ -1,10 +1,11 @@
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import ModalUpload from "./ModalUpload";
 
 const UploadProject = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const showModal = () => {
     setIsModalOpen(true);
   };

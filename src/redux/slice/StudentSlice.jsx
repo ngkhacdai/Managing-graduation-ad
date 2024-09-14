@@ -23,13 +23,15 @@ const studentSlice = createSlice({
     },
     updateStudentAction: (state, action) => {
       const { id, email, status, userName } = action.payload;
-      const index = state.studentData.findIndex((student) => student.id === id);
+      const index = state.studentData.findIndex(
+        (student) => student.accountId === id
+      );
 
       if (index !== -1) {
         state.studentData[index].userName = userName;
         state.studentData[index].email = email;
         state.studentData[index].role = "STUDENT";
-        state.studentData[index].status = status;
+        state.studentData[index].statusAccount = status;
       }
     },
   },

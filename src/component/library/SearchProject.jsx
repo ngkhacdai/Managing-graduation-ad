@@ -2,7 +2,11 @@ import React from "react";
 const { Search } = Input;
 import { AudioOutlined } from "@ant-design/icons";
 import { Input } from "antd";
-const SearchProject = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { fillter } from "../../redux/slice/Library.slice";
+import { saveSearchInput } from "../../redux/slice/Library.slice";
+const SearchProject = ({ filter, setSearchText }) => {
+  const dispatch = useDispatch();
   const suffix = (
     <AudioOutlined
       style={{
@@ -11,7 +15,14 @@ const SearchProject = () => {
       }}
     />
   );
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const onSearch = (value) => {
+    const form = {
+      keyword: value,
+      branch: filter.branch,
+    };
+    dispatch(fillter(form));
+    dispatch(saveSearchInput(value));
+  };
   return (
     <div>
       <Search
@@ -20,6 +31,7 @@ const SearchProject = () => {
         size="middle"
         suffix={suffix}
         onSearch={onSearch}
+        onChange={(e) => setSearchText(e.target.value)}
       />
     </div>
   );

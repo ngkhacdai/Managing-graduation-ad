@@ -1,24 +1,29 @@
 import { Button, Pagination, Table } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import debounce from "lodash/debounce";
 
 import HeaderProject from "./HeaderProject";
 import ModalDetail from "./ModalDetail";
-import { getProjectNotDone } from "../../api/project";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProject } from "../../redux/slice/ProjectSlice";
 
 const ProjectScreen = () => {
-  const [projectData, setProjectData] = useState([]);
+  const dispatch = useDispatch();
+  const projectData = useSelector((state) => state.project.project);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailProject, setDetailProject] = useState([]);
 
-  const getProjectData = async () => {
-    const response = await getProjectNotDone();
-    setProjectData(response);
-  };
+  const debounceGetProjectData = useCallback(
+    debounce(() => dispatch(fetchProject()), 300),
+    [dispatch]
+  );
 
   useEffect(() => {
-    getProjectData();
-  }, []);
+    debounceGetProjectData();
+
+    return () => {
+      debounceGetProjectData.cancel();
+    };
+  }, [debounceGetProjectData]);
 
   const columns = [
     {
@@ -68,7 +73,11 @@ const ProjectScreen = () => {
       title: "Detail",
       key: "detail",
       render: (record) => {
-        return <ModalDetail />;
+        return (
+          <>
+            <ModalDetail completed={record.completed} projectId={record.id} />
+          </>
+        );
       },
     },
   ];
@@ -77,19 +86,11 @@ const ProjectScreen = () => {
     setCurrentPage(page);
   };
 
-  const showDetail = (item) => {
-    setDetailProject(item);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setDetailProject([]);
-    setIsModalOpen(false);
-  };
   return (
     <div>
       <HeaderProject />
       <Table
-        scroll={{ x: 600 }}
+        scroll={{ x: 900 }}
         columns={columns}
         rowKey="id"
         dataSource={projectData}

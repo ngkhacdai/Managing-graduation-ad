@@ -35,10 +35,8 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
     if (password) {
       formData.password = password;
     }
-
     try {
-      const response = await updateStudent(student.id, formData);
-      console.log(response);
+      const response = await updateStudent(student.accountId, formData);
       dispatch(updateStudentAction(response));
     } catch (error) {
       console.log(error);
@@ -86,7 +84,7 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
           initialValues={{
             userName: student.userName,
             email: student.email,
-            status: student.status,
+            status: student.statusAccount,
           }}
           form={form}
           onFinish={handleFinish}
@@ -127,12 +125,12 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
               ]}
             />
           </Form.Item>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <Form.Item label="Password" name="password">
               <Input disabled className="text-black cursor-default" />
             </Form.Item>
             <Button onClick={onFill}>Reset Password</Button>
-          </div>
+          </div> */}
         </Form>
       </Modal>
     </div>

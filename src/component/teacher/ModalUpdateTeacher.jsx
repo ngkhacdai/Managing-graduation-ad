@@ -5,6 +5,8 @@ import { updateTeacherAction } from "../../redux/slice/TeacherSlice";
 import { useDispatch } from "react-redux";
 
 const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
+  console.log(teacher);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -25,21 +27,25 @@ const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
     form.resetFields();
   };
   const handleFinish = async () => {
-    const { email, password, status, userName } = form.getFieldsValue();
+    const { email, status, userName, limit } = form.getFieldsValue();
     const formData = {
       email,
       status,
       userName,
+      menteesLimit: limit,
     };
 
-    if (password) {
-      formData.password = password;
-    }
-
     try {
-      const response = await updateTeacher(teacher.id, formData);
-      // console.log(response);
-      dispatch(updateTeacherAction(response));
+      await updateTeacher(teacher.accountId, formData);
+      const dataUpdate = {
+        accountId: teacher.accountId,
+        avatar: teacher.avatar,
+        email,
+        status,
+        userName,
+        limitOfMentees: teacher.limitOfMentees.split("/")[0] + "/" + limit,
+      };
+      dispatch(updateTeacherAction(dataUpdate));
     } catch (error) {
       console.log(error);
       alertMessage(error.message, "error");
@@ -50,11 +56,6 @@ const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
     setTimeout(() => {
       closeModal();
     }, 300);
-  };
-  const onFill = () => {
-    form.setFieldsValue({
-      password: Math.random().toString(36).slice(-8),
-    });
   };
 
   return (
@@ -88,6 +89,7 @@ const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
             userName: teacher.userName,
             email: teacher.email,
             status: teacher.status,
+            limit: teacher.limitOfMentees.split("/")[1],
           }}
           form={form}
           onFinish={handleFinish}
@@ -128,12 +130,24 @@ const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
               ]}
             />
           </Form.Item>
-          <div className="flex justify-between items-center">
+          <Form.Item
+            label="Mentee limit"
+            name="limit"
+            rules={[
+              {
+                required: true,
+                message: "Please input mentee limit!",
+              },
+            ]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          {/* <div className="flex justify-between items-center">
             <Form.Item label="Password" name="password">
               <Input disabled className="text-black cursor-default" />
             </Form.Item>
             <Button onClick={onFill}>Reset Password</Button>
-          </div>
+          </div> */}
         </Form>
       </Modal>
     </div>

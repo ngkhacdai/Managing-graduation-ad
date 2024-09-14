@@ -7,14 +7,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-const PieChartProject = () => {
-  const data = [
-    { name: "Processing", value: 400 },
-    { name: "Private", value: 300 },
-    { name: "Public", value: 300 },
-    { name: "Reviewing", value: 200 },
-  ];
-
+const PieChartProject = ({ dataForDashBoardViews }) => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -47,7 +40,7 @@ const PieChartProject = () => {
       <ResponsiveContainer>
         <PieChart>
           <Pie
-            data={data}
+            data={dataForDashBoardViews}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -55,7 +48,7 @@ const PieChartProject = () => {
             fill="#8884d8"
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {dataForDashBoardViews.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}

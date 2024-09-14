@@ -1,4 +1,12 @@
-import { Button, message, Pagination, Popover, Spin, Table } from "antd";
+import {
+  Button,
+  message,
+  Pagination,
+  Popover,
+  Spin,
+  Table,
+  Tooltip,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import { FaUserEdit } from "react-icons/fa";
 import { TiUserDelete } from "react-icons/ti";
@@ -6,6 +14,7 @@ import ModalDeleteStudent from "./ModalDeleteStudent";
 import ModalUpdateStudent from "./ModalUpdateStudent";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllStudent } from "../../redux/slice/StudentSlice";
+import ModalDetailStudent from "./ModalDetailStudent";
 
 const TableStudent = () => {
   const [messageAPI, contexHolder] = message.useMessage();
@@ -59,11 +68,6 @@ const TableStudent = () => {
       },
     },
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "User Name",
       dataIndex: "userName",
       key: "name",
@@ -80,7 +84,7 @@ const TableStudent = () => {
     },
     {
       title: "Status",
-      dataIndex: "status",
+      dataIndex: "statusAccount",
       key: "status",
     },
     {
@@ -88,8 +92,9 @@ const TableStudent = () => {
       key: "action",
       render: (record, text, index) => {
         return (
-          <>
-            <Popover className="m-2" content={<p>Edit Sutdent</p>}>
+          <div className="flex items-center">
+            <ModalDetailStudent profile={record} />
+            <Tooltip className="m-2" title={<p>Edit Sutdent</p>}>
               <Button
                 type="primary"
                 onClick={() => showModalUpdate(record)}
@@ -97,8 +102,8 @@ const TableStudent = () => {
               >
                 <FaUserEdit />
               </Button>
-            </Popover>
-          </>
+            </Tooltip>
+          </div>
         );
       },
     },
@@ -114,7 +119,7 @@ const TableStudent = () => {
       {contexHolder}
       <Table
         columns={columns}
-        rowKey="id"
+        rowKey="accountId"
         dataSource={studentData}
         scroll={{ x: 600 }}
         pagination={{

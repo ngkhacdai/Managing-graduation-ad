@@ -2,15 +2,17 @@ import { Button, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import HeaderProject from "./HeaderProject";
 import ModalDetail from "./ModalDetail";
-import { getProjectDone } from "../../api/project";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProject } from "../../redux/slice/Library.slice";
 
 const LibraryScreen = () => {
-  const [projectData, setProjectData] = useState<any>([]);
+  const dispatch = useDispatch<any>();
+  const projectData = useSelector((state: any) => state.library.project);
   const [currentPage, setCurrentPage] = useState(1);
   const getProjectData = async () => {
-    const response = await getProjectDone();
-    setProjectData(response);
+    dispatch(fetchProject());
   };
+  console.log(projectData);
 
   useEffect(() => {
     getProjectData();
@@ -67,7 +69,7 @@ const LibraryScreen = () => {
       title: "Detail",
       key: "detail",
       render: (record) => {
-        return <ModalDetail />;
+        return <ModalDetail projectId={record.id} isPublic={record.public} />;
       },
     },
   ];
@@ -85,7 +87,6 @@ const LibraryScreen = () => {
         rowKey="id"
         dataSource={projectData}
         pagination={{
-          total: 500,
           defaultCurrent: currentPage,
           onChange: paginationChange,
           showSizeChanger: false,

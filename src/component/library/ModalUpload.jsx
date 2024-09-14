@@ -2,12 +2,23 @@ import { DatePicker, Modal, Select, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { FaUpload } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 const ModalUpload = ({ closeModal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
+  const branch = useSelector((state) => state.branch.data);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!branch) {
+      dispatch(fetchDataBranch());
+    }
+  }, []);
+  const option = branch.map((item) => {
+    return { value: item.id, label: item.name };
+  });
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -16,6 +27,9 @@ const ModalUpload = ({ closeModal }) => {
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    setTimeout(() => {
+      closeModal();
+    }, 300);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -90,25 +104,21 @@ const ModalUpload = ({ closeModal }) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Major" name="major">
+          <Form.Item
+            label="Major"
+            rules={[
+              {
+                required: true,
+                message: "Please select major!",
+              },
+            ]}
+            name="major"
+          >
             <Select
-              defaultValue="lucy"
+              defaultValue="SelectValue"
               className="w-full text-center"
               onChange={handleChange}
-              options={[
-                {
-                  value: "jack",
-                  label: "Jack",
-                },
-                {
-                  value: "lucy",
-                  label: "Lucy",
-                },
-                {
-                  value: "Yiminghe",
-                  label: "yiminghe",
-                },
-              ]}
+              options={option}
             />
           </Form.Item>
           <Form.Item

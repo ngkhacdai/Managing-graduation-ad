@@ -22,14 +22,16 @@ const teacherSlice = createSlice({
       state.teacherData = [action.payload, ...state.teacherData];
     },
     updateTeacherAction: (state, action) => {
-      const { id, email, status, userName } = action.payload;
-      const index = state.teacherData.findIndex((teacher) => teacher.id === id);
-
+      const { accountId, email, status, userName, limitOfMentees } =
+        action.payload;
+      const index = state.teacherData.findIndex(
+        (teacher) => teacher.accountId === accountId
+      );
       if (index !== -1) {
         state.teacherData[index].userName = userName;
         state.teacherData[index].email = email;
-        state.teacherData[index].role = "TEACHER";
         state.teacherData[index].status = status;
+        state.teacherData[index].limitOfMentees = limitOfMentees;
       }
     },
   },

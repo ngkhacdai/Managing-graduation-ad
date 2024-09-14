@@ -15,19 +15,20 @@ import LibraryPage from "./pages/Library.page";
 import MajorPage from "./pages/Major.page";
 import { useEffect } from "react";
 import PreviewPage from "./pages/Preview.page";
-import locale from "antd/es/date-picker/locale/en_US";
-
+import Session from "./pages/Session.page";
+import SessionDetailPage from "./pages/SessionDetail.page";
+import PageTitle from "./PageTitle";
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const locate = useLocation();
   const token = localStorage.getItem("token");
   useEffect(() => {
-    // const invalid = ["/", "/view"];
-    // if (!invalid.includes(locate.pathname)) {
-    //   if (!token) {
-    //     navigate("/");
-    //   }
-    // }
+    const invalid = ["/", "/view"];
+    if (!invalid.includes(locate.pathname)) {
+      if (!token) {
+        navigate("/");
+      }
+    }
   }, [navigate, token]);
 
   return token ? children : null;
@@ -36,6 +37,7 @@ function ProtectedRoute({ children }) {
 function App() {
   return (
     <BrowserRouter>
+      <PageTitle />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/view" element={<PreviewPage />} />
@@ -50,6 +52,8 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="major" element={<MajorPage />} />
           <Route path="project" element={<ProjectPage />} />
+          <Route path="session" element={<Session />} />
+          <Route path="session/detail/:id" element={<SessionDetailPage />} />
           <Route path="student" element={<StudentPage />} />
           <Route path="teacher" element={<TeacherPage />} />
           <Route path="library" element={<LibraryPage />} />

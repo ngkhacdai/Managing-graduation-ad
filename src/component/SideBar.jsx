@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard, MdOutlineLocalLibrary } from "react-icons/md";
 import {
@@ -15,6 +9,9 @@ import {
   FaProjectDiagram,
 } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
+import ModalNotification from "./notification/ModalNotification";
+import { SiSessionize } from "react-icons/si";
+import logo from "../assets/logo.png";
 const { Header, Sider, Content } = Layout;
 const SideBar = () => {
   const navigate = useNavigate();
@@ -31,14 +28,19 @@ const SideBar = () => {
     <div>
       <Layout>
         <Sider
-          className="sticky h-screen top-0 left-0"
+          className="sticky bg-white h-screen top-0 left-0"
           trigger={null}
           collapsible
           collapsed={collapsed}
         >
-          <div className="demo-logo-vertical" />
+          <div>
+            <img
+              className={`${collapsed ? "w-24 h-24 " : "w-28 h-28"} mx-auto `}
+              alt=""
+              src={logo}
+            />
+          </div>
           <Menu
-            theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
             items={[
@@ -50,27 +52,32 @@ const SideBar = () => {
               {
                 key: "/home/major",
                 icon: <FaCodeBranch />,
-                label: <Link to={"major"}>Major</Link>,
+                label: <Link to={"major"}>Majors</Link>,
               },
               {
-                key: "/home/project",
-                icon: <FaProjectDiagram />,
-                label: <Link to={"project"}>Project</Link>,
+                key: "/home/session",
+                icon: <SiSessionize />,
+                label: <Link to={"session"}>Sessions</Link>,
               },
               {
                 key: "/home/student",
                 icon: <PiStudentBold />,
-                label: <Link to={"student"}>Student</Link>,
+                label: <Link to={"student"}>Students</Link>,
               },
               {
                 key: "/home/teacher",
                 icon: <FaChalkboardTeacher />,
-                label: <Link to={"teacher"}>Teacher</Link>,
+                label: <Link to={"teacher"}>Teachers</Link>,
+              },
+              {
+                key: "/home/project",
+                icon: <FaProjectDiagram />,
+                label: <Link to={"project"}>Projects</Link>,
               },
               {
                 key: "/home/library",
                 icon: <MdOutlineLocalLibrary />,
-                label: <Link to={"library"}>Library</Link>,
+                label: <Link to={"library"}>Libraries</Link>,
               },
             ]}
           />
@@ -107,11 +114,17 @@ const SideBar = () => {
                   ? "Student"
                   : location.pathname === "/home/teacher"
                   ? "Teacher"
+                  : location.pathname === "/home/session"
+                  ? "Session"
                   : location.pathname === "/home/library" && "Library"}
               </p>
-              <Button className="mx-2" onClick={logout}>
-                Log out
-              </Button>
+              <div className="flex items-center">
+                <ModalNotification />
+
+                <Button type="text" className="mx-2" onClick={logout}>
+                  Log out
+                </Button>
+              </div>
             </div>
           </Header>
 

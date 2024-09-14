@@ -1,58 +1,46 @@
 import { Button, Checkbox, Col, Form, Modal, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import { getBranchByPage } from "../../api/branch";
 import { useForm } from "antd/es/form/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataBranch } from "../../redux/slice/BranchSlice";
+import { fillter, saveFilter } from "../../redux/slice/Library.slice";
 
-const ModalFilter = () => {
+const ModalFilter = ({ searchText, setFilter, filter }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ckbStatus, setCkbStatus] = useState([]);
-  const [tempStatus, setTempStatus] = useState([]);
-  const [ckbBranch, setCkbBranch] = useState([]);
-  const [tempBranch, setTempBranch] = useState([]);
-  const [form] = useForm();
+  const [form] = Form.useForm();
   const listBranch = useSelector((state) => state.branch.data);
   const dispatch = useDispatch();
 
-  const getBranchData = async () => {
-    dispatch(fetchDataBranch());
-  };
-
   useEffect(() => {
-    if (listBranch <= 0) {
-      getBranchData();
+    if (listBranch.length === 0) {
+      dispatch(fetchDataBranch());
     }
-  }, []);
+  }, [listBranch.length, dispatch]);
 
   const showModal = () => {
-    form.setFieldsValue({ status: ckbStatus, branch: ckbBranch });
     setIsModalOpen(true);
+    form.setFieldsValue(filter);
   };
 
   const handleOk = () => {
     form.submit();
-    setCkbStatus(tempStatus);
-    setCkbBranch(tempBranch);
     setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setTempStatus(ckbStatus);
-    setTempBranch(ckbBranch);
     setIsModalOpen(false);
   };
 
   const submitForm = () => {
-    console.log(form.getFieldsValue());
-  };
-
-  const onStatusChange = (checkedValues) => {
-    setTempStatus(checkedValues); // Cập nhật giá trị tạm thời cho status
-  };
-
-  const onBranchChange = (checkedValues) => {
-    setTempBranch(checkedValues); // Cập nhật giá trị tạm thời cho branch
+    const value = form.getFieldsValue();
+    // dispatch(saveFilter(value));
+    setFilter(value);
+    const formData = {
+      keyword: searchText,
+      branch: value.branch,
+      status: value.status,
+    };
+    dispatch(fillter(formData));
   };
 
   return (
@@ -68,10 +56,6 @@ const ModalFilter = () => {
           form={form}
           onFinish={submitForm}
           layout="vertical"
-          initialValues={{
-            status: ckbStatus,
-            branch: ckbBranch,
-          }}
           className="select-none"
         >
           <Form.Item label="Status" name="status">
@@ -79,14 +63,13 @@ const ModalFilter = () => {
               style={{
                 width: "100%",
               }}
-              onChange={onStatusChange}
             >
               <Row>
                 <Col className="m-1">
-                  <Checkbox value="Public">Public</Checkbox>
+                  <Checkbox value="0">Private</Checkbox>
                 </Col>
                 <Col className="m-1">
-                  <Checkbox value="Private">Private</Checkbox>
+                  <Checkbox value="1">Public</Checkbox>
                 </Col>
               </Row>
             </Checkbox.Group>
@@ -96,7 +79,6 @@ const ModalFilter = () => {
               style={{
                 width: "100%",
               }}
-              onChange={onBranchChange}
             >
               <Row>
                 {listBranch.length > 0 &&
