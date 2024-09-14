@@ -57,7 +57,7 @@ const ModalAddStudent = () => {
           role: response.role.roleName,
           userName: response.userName,
           email: response.email,
-          status: response.status,
+          statusAccount: response.status,
         })
       );
       messageAPI.success("Add student successfully");

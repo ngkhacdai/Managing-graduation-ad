@@ -5,6 +5,7 @@ import { updateBranchAction } from "../../redux/slice/BranchSlice";
 import { useDispatch } from "react-redux";
 const ModalUpdateMajor = ({ major, closeModal, alertMessage }) => {
   const dispatch = useDispatch();
+  console.log(major);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -60,7 +61,7 @@ const ModalUpdateMajor = ({ major, closeModal, alertMessage }) => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           initialValues={{
-            majorName: major.majorName,
+            majorName: major.name,
           }}
         >
           <Form.Item

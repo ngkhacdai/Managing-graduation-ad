@@ -1,16 +1,21 @@
 import { Button, Checkbox, Col, Form, Input, Modal, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { detailProjectFinish } from "../../api/project";
+import { useDispatch } from "react-redux";
+import useMessage from "antd/es/message/useMessage";
+import { updateStatusProject } from "../../redux/slice/Library.slice";
 
 const ModalDetail = ({ projectId, isPublic }) => {
+  const [message, contextHolder] = useMessage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatePoint, setUpdatePoint] = useState(true);
   const [projectDetail, setProjectDetail] = useState();
-
+  const [form] = Form.useForm();
   const getData = async () => {
     const response = await detailProjectFinish(projectId);
     setProjectDetail(response);
   };
+  const dispatch = useDispatch();
   useEffect(() => {
     if (isModalOpen) {
       getData();
@@ -20,7 +25,16 @@ const ModalDetail = ({ projectId, isPublic }) => {
     setIsModalOpen(false);
   };
   const onFinish = (values) => {
-    console.log("Success:", values);
+    const formData = {
+      projectId,
+      newPoint: values.point,
+      publicProject: values.public.length > 0 ? true : false,
+    };
+    dispatch(updateStatusProject(formData));
+    message.success("Update project successfully");
+    setTimeout(() => {
+      handleCancel();
+    }, 300);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -29,8 +43,12 @@ const ModalDetail = ({ projectId, isPublic }) => {
     const encodedUrl = encodeURIComponent(url);
     return `/view?file=${encodedUrl.replace(/\//g, "_")}`;
   };
+  const handleOk = () => {
+    form.submit();
+  };
   return (
     <div>
+      {contextHolder}
       <Button onClick={() => setIsModalOpen(true)} type="primary">
         Detail
       </Button>
@@ -39,7 +57,13 @@ const ModalDetail = ({ projectId, isPublic }) => {
           title="Project Information Detail"
           open={isModalOpen}
           onCancel={handleCancel}
-          footer={<Button type="primary">Save</Button>}
+          onOk={handleOk}
+          className="w-1/2"
+          footer={
+            <Button onClick={handleOk} type="primary">
+              Save
+            </Button>
+          }
         >
           <p className="text-center my-2 font-bold text-xl">
             {projectDetail?.projectName}
@@ -71,7 +95,9 @@ const ModalDetail = ({ projectId, isPublic }) => {
           <div>
             <p className="text-lg font-semibold">Project description</p>
             <hr />
-            <p>{projectDetail?.projectDescription}</p>
+            <p className="whitespace-pre-wrap break-words">
+              {projectDetail?.projectDescription}
+            </p>
           </div>
           <div>
             <p className="text-lg font-semibold">File upload</p>
@@ -87,6 +113,7 @@ const ModalDetail = ({ projectId, isPublic }) => {
             className="mt-2"
             name="basic"
             layout="vertical"
+            form={form}
             initialValues={{
               point: projectDetail?.mark,
               public: isPublic ? ["public"] : [],

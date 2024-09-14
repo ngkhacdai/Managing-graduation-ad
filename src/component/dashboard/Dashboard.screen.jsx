@@ -19,8 +19,8 @@ const DashboardScreen = () => {
     <div>
       <HeaderDashBoard
         totalProject={data.totalProject}
-        totalStudent={data.totalProject}
-        totalTeacher={data.totalProject}
+        totalStudent={data.totalStudent}
+        totalTeacher={data.totalTeacher}
       />
       <br />
       <BodyDashBoard

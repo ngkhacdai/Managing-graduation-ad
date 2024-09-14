@@ -41,11 +41,12 @@ const ModalAddTeacher = () => {
       console.log(response);
       dispatch(
         addTeacherAction({
-          id: response.id,
+          accountId: response.id,
           role: response.role.roleName,
           userName: response.userName,
           email: response.email,
           status: response.status,
+          limitOfMentees: "0/5",
         })
       );
       messageAPI.success("Add teacher successfully");

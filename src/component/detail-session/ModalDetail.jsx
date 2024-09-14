@@ -9,6 +9,8 @@ const ModalDetail = ({ projectId, completed }) => {
   const [projectDetail, setProjectDetail] = useState();
   const getData = async () => {
     const response = await detailProject(projectId);
+    console.log(response);
+
     setProjectDetail(response);
   };
   useEffect(() => {
@@ -39,7 +41,6 @@ const ModalDetail = ({ projectId, completed }) => {
         Detail
       </Button>
       <Modal
-        className="w-1/2"
         title="Project Information Detail"
         open={isModalOpen}
         onOk={handleOk}
@@ -75,22 +76,17 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
           </div>
           <div>
-            <p className="text-lg font-semibold ">Project description</p>
+            <p className="text-lg font-semibold">Project description</p>
             <hr />
-            <p className="whitespace-pre-wrap">
-              {projectDetail?.projectDescription}
-            </p>
+            <p>{projectDetail?.projectDescription}</p>
           </div>
           {completed && (
             <>
               <div>
                 <p className="text-lg font-semibold">File upload</p>
                 <hr />
-                <a
-                  href={changeUrlToSearchParams(projectDetail?.fileFinal)}
-                  target="_blank"
-                >
-                  fileupload.pdf
+                <a href={changeUrlToSearchParams()} target="_blank">
+                  {projectDetail?.fileFinal}
                 </a>
               </div>
               <div className="mt-2">

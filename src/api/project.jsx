@@ -49,3 +49,15 @@ export const detailProjectFinish = async (projectId) => {
   const response = await axios.get(`/getDetailProject/${projectId}`);
   return response;
 };
+
+export const getProjectBySession = async (projectId) => {
+  const response = await axios.get(
+    `/admin/getAllProjectBySession/${projectId}`
+  );
+  return response;
+};
+
+export const updateStatus = async (form) => {
+  const response = await axios.patch(`/admin/updateStatus`, form);
+  return response;
+};

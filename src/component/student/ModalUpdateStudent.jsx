@@ -35,10 +35,8 @@ const ModalUpdateStudent = ({ student, closeModal, alertMessage }) => {
     if (password) {
       formData.password = password;
     }
-
     try {
-      const response = await updateStudent(student.id, formData);
-      console.log(response);
+      const response = await updateStudent(student.accountId, formData);
       dispatch(updateStudentAction(response));
     } catch (error) {
       console.log(error);

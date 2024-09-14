@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { filterProjectDone, getProjectDone } from "../../api/project";
+import {
+  filterProjectDone,
+  getProjectDone,
+  updateStatus,
+} from "../../api/project";
 const initialState = {
   project: [],
   filter: {
@@ -14,6 +18,13 @@ export const fetchProject = createAsyncThunk(
   async () => {
     const response = await getProjectDone();
     return response;
+  }
+);
+export const updateStatusProject = createAsyncThunk(
+  "projectSlice/updateStatusProject",
+  async (form) => {
+    await updateStatus(form);
+    return form;
   }
 );
 export const fillter = createAsyncThunk("librarySlice/filter", async (form) => {
@@ -41,6 +52,15 @@ const librarySlice = createSlice({
     });
     builder.addCase(fillter.fulfilled, (state, action) => {
       state.project = action.payload;
+    });
+    builder.addCase(updateStatusProject.fulfilled, (state, action) => {
+      const findProject = state.project.findIndex(
+        (item) => item.id === Number(action.payload.projectId)
+      );
+      if (findProject !== -1) {
+        state.project[findProject].point = action.payload.newPoint;
+        state.project[findProject].public = action.payload.publicProject;
+      }
     });
   },
 });

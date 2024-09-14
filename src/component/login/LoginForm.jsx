@@ -23,13 +23,8 @@ const LoginForm = ({ changeForm }) => {
       messageApi.success("Login successfuly");
       navigate("/home");
     } catch (error) {
-      console.log(error);
-
       return messageApi.error("Email or password are incorrect");
     }
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
   return (
     <div>
@@ -42,7 +37,6 @@ const LoginForm = ({ changeForm }) => {
           remember: true,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item

@@ -11,6 +11,7 @@ import {
 import { PiStudentBold } from "react-icons/pi";
 import ModalNotification from "./notification/ModalNotification";
 import { SiSessionize } from "react-icons/si";
+import logo from "../assets/logo.png";
 const { Header, Sider, Content } = Layout;
 const SideBar = () => {
   const navigate = useNavigate();
@@ -27,14 +28,19 @@ const SideBar = () => {
     <div>
       <Layout>
         <Sider
-          className="sticky h-screen top-0 left-0"
+          className="sticky bg-white h-screen top-0 left-0"
           trigger={null}
           collapsible
           collapsed={collapsed}
         >
-          <div className="demo-logo-vertical" />
+          <div>
+            <img
+              className={`${collapsed ? "w-24 h-24 " : "w-28 h-28"} mx-auto `}
+              alt=""
+              src={logo}
+            />
+          </div>
           <Menu
-            theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
             items={[
@@ -54,11 +60,6 @@ const SideBar = () => {
                 label: <Link to={"session"}>Sessions</Link>,
               },
               {
-                key: "/home/project",
-                icon: <FaProjectDiagram />,
-                label: <Link to={"project"}>Projects</Link>,
-              },
-              {
                 key: "/home/student",
                 icon: <PiStudentBold />,
                 label: <Link to={"student"}>Students</Link>,
@@ -67,6 +68,11 @@ const SideBar = () => {
                 key: "/home/teacher",
                 icon: <FaChalkboardTeacher />,
                 label: <Link to={"teacher"}>Teachers</Link>,
+              },
+              {
+                key: "/home/project",
+                icon: <FaProjectDiagram />,
+                label: <Link to={"project"}>Projects</Link>,
               },
               {
                 key: "/home/library",

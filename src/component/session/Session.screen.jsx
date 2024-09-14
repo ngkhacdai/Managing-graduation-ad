@@ -6,7 +6,7 @@ import { Spin } from "antd";
 
 const SessionScreen = () => {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.session.sessionData);
+  const loading = useSelector((state) => state.session.loading);
   useEffect(() => {
     dispatch(fetchSessionData());
   }, []);

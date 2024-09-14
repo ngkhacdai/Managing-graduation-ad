@@ -26,7 +26,6 @@ const TableStudent = () => {
   const studentData = useSelector((state) => state.student.studentData);
   const loading = useSelector((state) => state.student.loading);
   const dispatch = useDispatch();
-  console.log("Student data", studentData);
 
   useEffect(() => {
     dispatch(getAllStudent());

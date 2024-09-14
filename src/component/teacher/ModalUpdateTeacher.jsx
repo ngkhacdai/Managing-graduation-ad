@@ -5,6 +5,8 @@ import { updateTeacherAction } from "../../redux/slice/TeacherSlice";
 import { useDispatch } from "react-redux";
 
 const ModalUpdateTeacher = ({ teacher, closeModal, alertMessage }) => {
+  console.log(teacher);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
