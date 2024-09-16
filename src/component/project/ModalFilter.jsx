@@ -70,7 +70,7 @@ const ModalFilter = () => {
               </Row>
             </Checkbox.Group>
           </Form.Item>
-          <Form.Item name="branch" label="Branches">
+          <Form.Item name="branch" label="Majors">
             <Checkbox.Group style={{ width: "100%" }}>
               <Row>
                 {listBranch.length > 0 &&

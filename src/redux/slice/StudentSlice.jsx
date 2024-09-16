@@ -1,10 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllStudentAPI } from "../../api/student";
+import { getAllStudentAPI, searchStudent } from "../../api/student";
 
 export const getAllStudent = createAsyncThunk(
   "student/getAllStudent",
   async () => {
     const response = await getAllStudentAPI();
+    return response;
+  }
+);
+
+export const searchStudentThunk = createAsyncThunk(
+  "student/searchStudent",
+  async (form) => {
+    const response = await searchStudent(form);
     return response;
   }
 );
@@ -49,6 +57,9 @@ const studentSlice = createSlice({
         console.log(action.error);
         state.studentData = [];
       });
+    builder.addCase(searchStudentThunk.fulfilled, (state, action) => {
+      state.studentData = action.payload;
+    });
   },
 });
 

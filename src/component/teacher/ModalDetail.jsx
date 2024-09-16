@@ -7,7 +7,7 @@ const ModalDetail = ({ profile }) => {
 
   return (
     <div>
-      <Tooltip title="Detail">
+      <Tooltip title="View detail">
         <Button onClick={() => setIsShow(true)} type="primary">
           <BiSolidUserDetail />
         </Button>
@@ -36,7 +36,7 @@ const ModalDetail = ({ profile }) => {
               <Col span={16}>{profile.personalEmail}</Col>
             </Row>
             <Row className="my-1">
-              <Col span={8}>Branch: </Col>
+              <Col span={8}>Major: </Col>
               <Col span={16}>{profile.branch}</Col>
             </Row>
             <Row className="my-1">
@@ -52,7 +52,7 @@ const ModalDetail = ({ profile }) => {
               <Col span={16}>{profile.phoneNumber}</Col>
             </Row>
             <Row className="my-1">
-              <Col span={8}>Mentee Student: </Col>
+              <Col span={8}>Mentee limit: </Col>
               <Col span={16}>{profile.limitOfMentees}</Col>
             </Row>
             <Row className="my-1">

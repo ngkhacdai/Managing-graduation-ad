@@ -167,7 +167,7 @@ const ModalAddStudent = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Branch"
+            label="Major"
             name="branchId"
             rules={[
               {

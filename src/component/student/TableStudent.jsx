@@ -26,6 +26,7 @@ const TableStudent = () => {
   const studentData = useSelector((state) => state.student.studentData);
   const loading = useSelector((state) => state.student.loading);
   const dispatch = useDispatch();
+  console.log(studentData);
 
   useEffect(() => {
     dispatch(getAllStudent());
@@ -78,6 +79,11 @@ const TableStudent = () => {
       key: "email",
     },
     {
+      title: "Major",
+      dataIndex: "branch",
+      key: "major",
+    },
+    {
       title: "Role",
       dataIndex: "role",
       key: "role",
@@ -94,7 +100,7 @@ const TableStudent = () => {
         return (
           <div className="flex items-center">
             <ModalDetailStudent profile={record} />
-            <Tooltip className="m-2" title={<p>Edit Sutdent</p>}>
+            <Tooltip className="m-2" title={<p>Update Sutdent</p>}>
               <Button
                 type="primary"
                 onClick={() => showModalUpdate(record)}

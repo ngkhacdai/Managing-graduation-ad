@@ -156,12 +156,12 @@ const ModalAddTeacher = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Branch"
+            label="Major"
             name="branchId"
             rules={[
               {
                 required: true,
-                message: "Please input branch!",
+                message: "Please select major!",
               },
             ]}
           >

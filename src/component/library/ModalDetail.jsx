@@ -105,6 +105,7 @@ const ModalDetail = ({ projectId, isPublic }) => {
                 <a
                   target="_blank"
                   href={changeUrlToSearchParams(projectDetail?.fileFinal)}
+                  className="text-blue-500 underline hover:text-blue-700"
                 >
                   <p className=" line-clamp-1">{projectDetail?.fileName}</p>
                 </a>

@@ -6,7 +6,7 @@ const ModalDetailStudent = ({ profile }) => {
   const [isShow, setIsShow] = useState(false);
   return (
     <div>
-      <Tooltip title="Detail">
+      <Tooltip title="View detail">
         <Button onClick={() => setIsShow(true)} type="primary">
           <BiSolidUserDetail />
         </Button>
@@ -14,7 +14,7 @@ const ModalDetailStudent = ({ profile }) => {
       <Modal
         open={isShow}
         onCancel={() => setIsShow(false)}
-        title="Teacher profile"
+        title="Student profile"
       >
         <div>
           <div className="text-center mb-2">
@@ -23,7 +23,9 @@ const ModalDetailStudent = ({ profile }) => {
               src={profile.avatar}
               className="mx-auto mb-2 w-16 h-16 rounded-full"
             />
-            <p className="text-lg font-semibold">{profile.fullName}</p>
+            <p className="text-lg font-semibold">
+              {profile.fullName} - {profile.studentId}
+            </p>
           </div>
           <div>
             <Row className="my-1">
@@ -35,8 +37,12 @@ const ModalDetailStudent = ({ profile }) => {
               <Col span={16}>{profile.personalEmail}</Col>
             </Row>
             <Row className="my-1">
-              <Col span={8}>Branch: </Col>
+              <Col span={8}>Major: </Col>
               <Col span={16}>{profile.branch}</Col>
+            </Row>
+            <Row className="my-1">
+              <Col span={8}>Course year: </Col>
+              <Col span={16}>{profile.courseYear}</Col>
             </Row>
             <Row className="my-1">
               <Col span={8}>Phone Number: </Col>

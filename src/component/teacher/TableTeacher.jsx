@@ -58,6 +58,11 @@ const TableTeacher = () => {
       key: "email",
     },
     {
+      title: "Major",
+      dataIndex: "branch",
+      key: "major",
+    },
+    {
       title: "Role",
       dataIndex: "role",
       key: "role",

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllTeacherAPI } from "../../api/teacher";
+import { getAllTeacherAPI, searchTeacher } from "../../api/teacher";
 
 export const getAllTeacher = createAsyncThunk(
   "teacher/getAllTeacher",
@@ -8,7 +8,13 @@ export const getAllTeacher = createAsyncThunk(
     return response;
   }
 );
-
+export const searchTeacherThunk = createAsyncThunk(
+  "student/searchStudent",
+  async (form) => {
+    const response = await searchTeacher(form);
+    return response;
+  }
+);
 const initialState = {
   teacherData: [],
   loading: true,
@@ -49,6 +55,9 @@ const teacherSlice = createSlice({
         console.log(action.error);
         state.teacherData = [];
       });
+    builder.addCase(searchTeacherThunk.fulfilled, (state, action) => {
+      state.teacherData = action.payload;
+    });
   },
 });
 
