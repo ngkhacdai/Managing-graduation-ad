@@ -61,7 +61,7 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.studentPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.studentBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.studentBranch}</Col>
             </Row>
           </div>
           <p className="text-lg font-semibold">Mentor information</p>
@@ -73,7 +73,7 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.mentorPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.mentorBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.mentorBranch}</Col>
             </Row>
           </div>
           <div>
