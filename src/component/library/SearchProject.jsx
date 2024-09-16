@@ -7,14 +7,7 @@ import { fillter } from "../../redux/slice/Library.slice";
 import { saveSearchInput } from "../../redux/slice/Library.slice";
 const SearchProject = ({ filter, setSearchText }) => {
   const dispatch = useDispatch();
-  const suffix = (
-    <AudioOutlined
-      style={{
-        fontSize: 16,
-        color: "#1677ff",
-      }}
-    />
-  );
+
   const onSearch = (value) => {
     const form = {
       keyword: value,
@@ -29,7 +22,6 @@ const SearchProject = ({ filter, setSearchText }) => {
         className="max-w-96"
         placeholder="input search text"
         size="middle"
-        suffix={suffix}
         onSearch={onSearch}
         onChange={(e) => setSearchText(e.target.value)}
       />

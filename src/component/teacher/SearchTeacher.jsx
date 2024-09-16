@@ -20,7 +20,7 @@ const SearchTeacher = () => {
   const onSearch = (value) => {
     setSearchText(value);
     const formData = {
-      keyWord: searchText,
+      keyWord: value,
       status: filter.status,
       branch: filter.branch,
     };
