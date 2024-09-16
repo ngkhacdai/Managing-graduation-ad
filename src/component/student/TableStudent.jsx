@@ -88,8 +88,8 @@ const TableStudent = () => {
       key: "status",
     },
     {
-      title: "Action",
-      key: "action",
+      title: "Actions",
+      key: "actions",
       render: (record, text, index) => {
         return (
           <div className="flex items-center">

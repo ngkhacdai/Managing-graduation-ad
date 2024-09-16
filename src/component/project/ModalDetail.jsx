@@ -11,6 +11,7 @@ const ModalDetail = ({ projectId, completed }) => {
     const response = await detailProject(projectId);
     setProjectDetail(response);
   };
+
   useEffect(() => {
     if (isModalOpen) {
       getData();
@@ -36,10 +37,10 @@ const ModalDetail = ({ projectId, completed }) => {
     <div>
       {contextHolder}
       <Button type="primary" onClick={() => setIsModalOpen(true)}>
-        Detail
+        View detail
       </Button>
       <Modal
-        className="w-1/2"
+        className="lg:w-1/2 md:w-2/3 w-full"
         title="Project Information Detail"
         open={isModalOpen}
         onOk={handleOk}
@@ -59,7 +60,7 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.studentPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.studentBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.studentBranch}</Col>
             </Row>
           </div>
           <p className="text-lg font-semibold">Mentor information</p>
@@ -71,15 +72,23 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.mentorPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.mentorBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.mentorBranch}</Col>
             </Row>
           </div>
           <div>
-            <p className="text-lg font-semibold ">Project description</p>
+            <p className="text-lg font-semibold">Project information</p>
             <hr />
-            <p className="whitespace-pre-wrap">
-              {projectDetail?.projectDescription}
-            </p>
+            <Row className="flex mt-2">
+              <Col span={9}>Session: {projectDetail?.session}</Col>
+              <Col span={15}>Deadline: {projectDetail?.timeLimit}</Col>
+            </Row>
+            <div className="mt-2">
+              <p className="text-lg font-semibold">Project description:</p>
+              <hr />
+              <p className="whitespace-pre-wrap break-words mt-2">
+                {projectDetail?.projectDescription}
+              </p>
+            </div>
           </div>
           {completed && (
             <>

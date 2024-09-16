@@ -68,8 +68,8 @@ const TableMajor = () => {
       render: (record) => <p>{record?.name}</p>,
     },
     {
-      title: "Action",
-      key: "action",
+      title: "Actions",
+      key: "actions",
       render: (record) => (
         <div>
           <Button

@@ -9,10 +9,10 @@ const ModalDetail = ({ projectId, completed }) => {
   const [projectDetail, setProjectDetail] = useState();
   const getData = async () => {
     const response = await detailProject(projectId);
-    console.log(response);
-
     setProjectDetail(response);
   };
+  console.log("sesstion project", projectDetail);
+
   useEffect(() => {
     if (isModalOpen) {
       getData();
@@ -24,21 +24,21 @@ const ModalDetail = ({ projectId, completed }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const onFinish = (values) => {
-    if (Number(values.point) < 0 || Number(values.point) > 10) {
-      messageAPi.error("Point should be between 0 and 10.");
-      return;
-    }
-  };
+  // const onFinish = (values) => {
+  //   if (Number(values.point) < 0 || Number(values.point) > 10) {
+  //     messageAPi.error("Point should be between 0 and 10.");
+  //     return;
+  //   }
+  // };
   const changeUrlToSearchParams = (url) => {
     const encodedUrl = encodeURIComponent(url);
-    return `/view/${encodedUrl.replace(/\//g, "_")}`;
+    return `/view?file=${encodedUrl.replace(/\//g, "_")}`;
   };
   return (
     <div>
       {contextHolder}
       <Button type="primary" onClick={() => setIsModalOpen(true)}>
-        Detail
+        View detail
       </Button>
       <Modal
         title="Project Information Detail"
@@ -46,6 +46,7 @@ const ModalDetail = ({ projectId, completed }) => {
         onOk={handleOk}
         footer={false}
         onCancel={handleCancel}
+        className="lg:w-1/2 md:w-2/3 w-full"
       >
         <div>
           <p className="text-center my-2 font-bold text-xl">
@@ -60,7 +61,7 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.studentPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.studentBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.studentBranch}</Col>
             </Row>
           </div>
           <p className="text-lg font-semibold">Mentor information</p>
@@ -72,25 +73,45 @@ const ModalDetail = ({ projectId, completed }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.mentorPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.mentorBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.mentorBranch}</Col>
             </Row>
           </div>
           <div>
-            <p className="text-lg font-semibold">Project description</p>
+            <p className="text-lg font-semibold">Project information</p>
             <hr />
-            <p>{projectDetail?.projectDescription}</p>
+            <Row className="flex mt-2">
+              <Col span={9}>Session: {projectDetail?.session}</Col>
+              <Col span={15}>Deadline: {projectDetail?.timeLimit}</Col>
+            </Row>
+            <Row className="flex mt-2">
+              <Col span={9}>Mark: {projectDetail?.mark}</Col>
+            </Row>
+            {completed && (
+              <Row className="mt-2">
+                <Col span={9}>File upload:</Col>
+                <Col span={15}>
+                  <a
+                    target="_blank"
+                    href={changeUrlToSearchParams(projectDetail?.fileFinal)}
+                    className="text-blue-500 underline hover:text-blue-700"
+                  >
+                    <p className="line-clamp-1">{projectDetail?.fileName}</p>
+                  </a>
+                </Col>
+              </Row>
+            )}
+            <div className="mt-2">
+              <p className="text-lg font-semibold">Project description:</p>
+              <hr />
+              <p className="whitespace-pre-wrap break-words mt-2">
+                {projectDetail?.projectDescription}
+              </p>
+            </div>
           </div>
-          {completed && (
+          {/* {completed && (
             <>
-              <div>
-                <p className="text-lg font-semibold">File upload</p>
-                <hr />
-                <a href={changeUrlToSearchParams()} target="_blank">
-                  {projectDetail?.fileFinal}
-                </a>
-              </div>
               <div className="mt-2">
-                <Form onFinish={onFinish}>
+                <Form initialValues={{}} onFinish={onFinish}>
                   <Form.Item
                     label="Point"
                     rules={[
@@ -111,7 +132,7 @@ const ModalDetail = ({ projectId, completed }) => {
                 </Form>
               </div>
             </>
-          )}
+          )} */}
         </div>
       </Modal>
     </div>

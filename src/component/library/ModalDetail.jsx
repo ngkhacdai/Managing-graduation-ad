@@ -50,7 +50,7 @@ const ModalDetail = ({ projectId, isPublic }) => {
     <div>
       {contextHolder}
       <Button onClick={() => setIsModalOpen(true)} type="primary">
-        Detail
+        View detail
       </Button>
       {projectDetail && (
         <Modal
@@ -58,7 +58,7 @@ const ModalDetail = ({ projectId, isPublic }) => {
           open={isModalOpen}
           onCancel={handleCancel}
           onOk={handleOk}
-          className="w-1/2"
+          className="lg:w-1/2 md:w-2/3 w-full"
           footer={
             <Button onClick={handleOk} type="primary">
               Save
@@ -77,7 +77,7 @@ const ModalDetail = ({ projectId, isPublic }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.studentPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.studentBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.studentBranch}</Col>
             </Row>
           </div>
           <p className="text-lg font-semibold">Mentor information</p>
@@ -89,26 +89,36 @@ const ModalDetail = ({ projectId, isPublic }) => {
             </Row>
             <Row className="flex mt-2">
               <Col span={9}>Phone: {projectDetail?.mentorPhone}</Col>
-              <Col span={15}>Branch: {projectDetail?.mentorBranch}</Col>
+              <Col span={15}>Major: {projectDetail?.mentorBranch}</Col>
             </Row>
           </div>
           <div>
-            <p className="text-lg font-semibold">Project description</p>
+            <p className="text-lg font-semibold">Project information</p>
             <hr />
-            <p className="whitespace-pre-wrap break-words">
-              {projectDetail?.projectDescription}
-            </p>
+            <Row className="flex mt-2">
+              <Col span={9}>Session: {projectDetail?.session}</Col>
+              <Col span={15}>Deadline: {projectDetail?.timeLimit}</Col>
+            </Row>
+            <Row className="mt-2">
+              <Col span={9}>File upload:</Col>
+              <Col span={15}>
+                <a
+                  target="_blank"
+                  href={changeUrlToSearchParams(projectDetail?.fileFinal)}
+                >
+                  <p className=" line-clamp-1">{projectDetail?.fileName}</p>
+                </a>
+              </Col>
+            </Row>
+            <div className="mt-2">
+              <p className="text-lg font-semibold">Project description:</p>
+              <hr />
+              <p className="whitespace-pre-wrap break-words mt-2">
+                {projectDetail?.projectDescription}
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-lg font-semibold">File upload</p>
-            <hr />
-            <a
-              target="_blank"
-              href={changeUrlToSearchParams(projectDetail?.fileFinal)}
-            >
-              {projectDetail?.fileName}
-            </a>
-          </div>
+
           <Form
             className="mt-2"
             name="basic"
