@@ -66,8 +66,8 @@ const LibraryScreen = () => {
       },
     },
     {
-      title: "Detail",
-      key: "detail",
+      title: "Action",
+      key: "action",
       render: (record) => {
         return <ModalDetail projectId={record.id} isPublic={record.public} />;
       },

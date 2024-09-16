@@ -73,8 +73,8 @@ const TableTeacher = () => {
       key: "menteeLimit",
     },
     {
-      title: "Action",
-      key: "action",
+      title: "Actions",
+      key: "actions",
       render: (record, text, index) => {
         return (
           <div className="flex items-center">

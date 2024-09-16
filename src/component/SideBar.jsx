@@ -116,6 +116,8 @@ const SideBar = () => {
                   ? "Teacher"
                   : location.pathname === "/home/session"
                   ? "Session"
+                  : location.pathname.startsWith("/home/session/detail")
+                  ? "Project in session"
                   : location.pathname === "/home/library" && "Library"}
               </p>
               <div className="flex items-center">

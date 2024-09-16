@@ -74,8 +74,8 @@ const ProjectScreen = () => {
       },
     },
     {
-      title: "Detail",
-      key: "detail",
+      title: "Actions",
+      key: "actions",
       render: (record) => {
         return (
           <>
