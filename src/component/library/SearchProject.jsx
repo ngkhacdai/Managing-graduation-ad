@@ -12,7 +12,9 @@ const SearchProject = ({ filter, setSearchText }) => {
     const form = {
       keyword: value,
       branch: filter.branch,
+      status: filter.status,
     };
+    setSearchText(value);
     dispatch(fillter(form));
     dispatch(saveSearchInput(value));
   };
@@ -23,7 +25,6 @@ const SearchProject = ({ filter, setSearchText }) => {
         placeholder="input search text"
         size="middle"
         onSearch={onSearch}
-        onChange={(e) => setSearchText(e.target.value)}
       />
     </div>
   );
