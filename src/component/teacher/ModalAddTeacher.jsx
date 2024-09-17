@@ -35,7 +35,6 @@ const ModalAddTeacher = () => {
     form.resetFields();
   };
   const handleFinish = async () => {
-    console.log("Success:", form.getFieldsValue());
     try {
       const response = await addTeacher(form.getFieldValue());
       console.log(response);
@@ -47,6 +46,7 @@ const ModalAddTeacher = () => {
           email: response.email,
           status: response.status,
           limitOfMentees: "0/5",
+          branch: major.find((item) => item.id == branchId).name,
         })
       );
       messageAPI.success("Add teacher successfully");

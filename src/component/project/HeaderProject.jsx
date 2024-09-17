@@ -21,9 +21,9 @@ const HeaderProject = () => {
             }}
           />
         </div>
-        <div>
+        {/* <div>
           <UploadProject />
-        </div>
+        </div> */}
       </div>
     </div>
   );

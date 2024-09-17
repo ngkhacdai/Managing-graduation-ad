@@ -58,6 +58,7 @@ const ModalAddStudent = () => {
           userName: response.userName,
           email: response.email,
           statusAccount: response.status,
+          branch: major.find((item) => item.id == branchId).name,
         })
       );
       messageAPI.success("Add student successfully");

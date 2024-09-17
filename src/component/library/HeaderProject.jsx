@@ -22,9 +22,9 @@ const HeaderProject = () => {
             filter={filter}
           />
         </div>
-        <div>
+        {/* <div>
           <UploadProject />
-        </div>
+        </div> */}
       </div>
     </div>
   );
